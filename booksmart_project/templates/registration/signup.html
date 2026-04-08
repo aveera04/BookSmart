@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - BooksMart{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-illustration">
+        <img src="https://via.placeholder.com/400x300/4a90e2/ffffff?text=Join+BooksMart" alt="Register illustration">
+    </div>
+    <div class="login-form">
+        <h2>Create Account</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="login-btn">Register</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </div>
+</div>
+{% endblock %}

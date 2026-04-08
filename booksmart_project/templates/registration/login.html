@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - BooksMart{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-illustration">
+        <img src="https://via.placeholder.com/400x300/4a90e2/ffffff?text=Books+%26+Cozy" alt="Books illustration">
+    </div>
+    <div class="login-form">
+        <h2>Welcome Back!</h2>
+        <h3>Login to BooksMart</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Email/Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}{{ form.username.errors }}{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}{{ form.password.errors }}{% endif %}
+            </div>
+            <div class="form-options">
+                <label>
+                    <input type="checkbox" name="remember"> Remember Me
+                </label>
+                <a href="#">Forgot Password?</a>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <p>New to BooksMart? <a href="{% url 'signup' %}">Register</a></p>
+    </div>
+</div>
+{% endblock %}
