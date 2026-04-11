@@ -13,6 +13,9 @@ import dotenv
 import os
 from pathlib import Path
 
+# Load environment variables from .env file
+dotenv.load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -76,8 +79,12 @@ WSGI_APPLICATION = 'booksmart_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'NAME': 'booksmart',
+        'USER': 'root',
+        'PASSWORD': os.getenv('MYSQL_PASSWORD'),
+        'PORT': '3306',
     }
 }
 
@@ -123,3 +130,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTH_USER_MODEL='myapp.User'
+
+AUTHENTICATION_BACKENDS=[
+    'myapp.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
