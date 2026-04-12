@@ -1,7 +1,15 @@
 .env
+# C:\Users\abirc\Desktop\BookSmart\booksmart_project\booksmart_project\__pycache__
 __pycache__/
+*.pyc
+.cache/
+.pytest_cache/
+*.egg-info/
+.mypy_cache/
+.coverage
 db.sqlite3
 
 /static/images
+.openclaude-profile.json    
 
 

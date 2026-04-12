@@ -63,3 +63,24 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+class Book(models.Model):
+    title = models.CharField(max_length=255)
+    isbn = models.CharField(max_length=13, unique=True)
+    author = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    publisher = models.CharField(max_length=255)
+    published_date = models.DateField()
+    image = models.ImageField(upload_to='book_images/', null=True, blank=True,verbose_name="Book Image")
+    genre = models.ForeignKey('Genre', on_delete=models.CASCADE, related_name='books')
+    def __str__(self):
+        return self.title
+    
+
+class Genre(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name

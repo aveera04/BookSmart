@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from . models import User
+from . models import User, Genre, Book
+from django.utils.html import format_html
 
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
@@ -27,3 +28,17 @@ class CustomUserAdmin(UserAdmin):
     filter_horizontal = ()
 
 admin.site.register(User, CustomUserAdmin)
+
+@admin.register(Genre)
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+
+@admin.register(Book)
+class BookAdmin(admin.ModelAdmin):
+    def book_image(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="70" height="100" />',obj.image.url)
+        return ""
+    list_display = ('title','isbn', 'author','description','price', 'genre', 'publisher', 'published_date','book_image')
+
+
