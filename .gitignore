@@ -9,7 +9,7 @@ __pycache__/
 .coverage
 db.sqlite3
 
-/static/images
+
 .openclaude-profile.json    
 
 

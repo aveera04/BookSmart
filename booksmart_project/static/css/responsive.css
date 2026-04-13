@@ -41,12 +41,9 @@
         order: 3;
     }
 
-    .logo {
-        font-size: 24px;
-    }
-
-    .logo::before {
-        font-size: 28px;
+    .logo img {
+        height: 44px;
+        width: auto;
     }
 
     .nav-bar {
@@ -225,13 +222,9 @@
         gap: 8px;
     }
 
-    .logo {
-        font-size: 20px;
-    }
-
-    .logo::before {
-        font-size: 24px;
-        margin-right: 6px;
+    .logo img {
+        height: 36px;
+        width: auto;
     }
 
     .login-register-btn {

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - BooksMart</title>
+    <title>Login - BooksMart</title>
+    <meta name="description" content="Login to your BooksMart account to access thousands of books.">
     <style>
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -13,79 +15,92 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #4a90a4 0%, #6bb6d0 100%);
+            background: linear-gradient(145deg, #2e6d8e 0%, #4a90a4 40%, #5ba3be 70%, #3a7a96 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Header Styles */
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* ===== TOP HEADER ===== */
         .top-header {
             background-color: #f8f9fa;
-            padding: 15px 50px;
+            padding: 14px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 10;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            font-size: 28px;
-            font-weight: bold;
-            color: #1e3a5f;
+            flex-shrink: 0;
         }
 
-        .logo::before {
-            content: "📚";
-            margin-right: 10px;
-            font-size: 32px;
+        .logo img {
+            display: block;
+            height: 46px;
+            width: auto;
         }
 
         .search-container {
-            flex: 0 0 400px;
+            flex: 0 0 350px;
             display: flex;
         }
 
         .search-container input {
             flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
+            padding: 9px 14px;
+            border: 1px solid #ccc;
             border-radius: 5px 0 0 5px;
             font-size: 14px;
             outline: none;
+            font-family: inherit;
+        }
+
+        .search-container input:focus {
+            border-color: #2c5f7c;
         }
 
         .search-container button {
-            padding: 10px 20px;
+            padding: 9px 16px;
             background-color: #2c5f7c;
             color: white;
             border: none;
             border-radius: 0 5px 5px 0;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #1e3a5f;
         }
 
         .login-register-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
+            gap: 7px;
+            padding: 9px 18px;
             background-color: transparent;
             color: #1e3a5f;
             border: none;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
+            font-family: inherit;
+            transition: color 0.3s;
         }
 
-        .login-register-btn::before {
-            content: "👤";
-            font-size: 18px;
-        }
+        .login-register-btn:hover { color: #2c5f7c; }
+        .login-register-btn::before { content: "👤"; font-size: 17px; }
 
-        /* Navigation Bar */
+        /* ===== NAVIGATION BAR ===== */
         .nav-bar {
             background-color: #1e3a5f;
             padding: 0 50px;
@@ -96,105 +111,114 @@
 
         .nav-links {
             display: flex;
-            list-style: none;
-            gap: 5px;
+            gap: 0;
         }
 
-        .nav-links a {
+        .nav-links li a {
             display: block;
-            padding: 18px 25px;
+            padding: 16px 22px;
             color: white;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 15px;
             transition: background-color 0.3s;
+            white-space: nowrap;
         }
 
-        .nav-links a:hover {
+        .nav-links li a:hover { background-color: #2c5f7c; }
+
+        .nav-links li a.active {
             background-color: #2c5f7c;
+            border-bottom: 3px solid #fff;
         }
 
-        .nav-links .dropdown {
-            position: relative;
-        }
-
-        .nav-links .dropdown::after {
-            content: " ▼";
-            font-size: 10px;
-        }
-
-        .my-account {
+        .my-account-link {
             color: white;
             text-decoration: none;
-            padding: 18px 25px;
-            font-size: 16px;
+            padding: 16px 22px;
+            font-size: 15px;
+            transition: background-color 0.3s;
+            display: block;
         }
 
-        /* Main Content */
+        .my-account-link:hover { background-color: #2c5f7c; }
+
+        /* ===== MAIN CONTENT ===== */
         .main-content {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 50px 20px;
+            padding: 50px 40px;
         }
 
-        .registration-container {
+        .page-container {
             display: flex;
-            max-width: 1200px;
+            max-width: 1100px;
             width: 100%;
-            gap: 50px;
+            gap: 60px;
             align-items: center;
         }
 
-        /* Left Illustration */
+        /* ===== LEFT ILLUSTRATION ===== */
         .illustration {
             flex: 1;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 24px;
+        }
+
+        .welcome-text {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-align: center;
         }
 
         .illustration-circle {
-            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            width: 380px;
+            height: 380px;
             border-radius: 50%;
-            padding: 60px;
-            position: relative;
-            width: 450px;
-            height: 450px;
+            overflow: hidden;
+            background: radial-gradient(circle at 60% 40%, #f5e9d0 0%, #e8d5b0 60%, #d4b896 100%);
             display: flex;
             justify-content: center;
             align-items: center;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.18);
         }
 
-        .illustration-content {
+        .illustration-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== LOGIN FORM CARD ===== */
+        .form-card {
+            flex: 0 0 440px;
+            background: #ddeaf5;
+            border-radius: 18px;
+            padding: 44px 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+        }
+
+        .form-card h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a1a;
             text-align: center;
-            font-size: 80px;
-        }
-
-        /* Registration Form */
-        .registration-form {
-            flex: 1;
-            background-color: white;
-            border-radius: 20px;
-            padding: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 500px;
-        }
-
-        .registration-form h1 {
-            font-size: 32px;
-            margin-bottom: 30px;
-            color: #1e3a5f;
-            text-align: center;
+            margin-bottom: 28px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 7px;
             font-weight: 600;
             color: #333;
             font-size: 14px;
@@ -202,140 +226,164 @@
 
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+            padding: 11px 14px;
+            border: 1.5px solid #c8d8e8;
             border-radius: 8px;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.3s;
+            background: #ffffff;
+            color: #333;
+            font-family: inherit;
+            transition: border-color 0.25s, box-shadow 0.25s;
         }
+
+        .form-group input::placeholder { color: #aab3be; }
 
         .form-group input:focus {
             border-color: #2c5f7c;
+            box-shadow: 0 0 0 3px rgba(44,95,124,0.12);
         }
 
         .password-wrapper {
             position: relative;
         }
 
-        .password-strength {
-            margin-top: 8px;
-            display: flex;
-            gap: 5px;
-        }
-
-        .strength-bar {
-            height: 4px;
-            flex: 1;
-            background-color: #e0e0e0;
-            border-radius: 2px;
-            transition: background-color 0.3s;
-        }
-
-        .strength-bar.active {
-            background-color: #4caf50;
+        .password-wrapper input {
+            padding-right: 42px;
         }
 
         .toggle-password {
             position: absolute;
-            right: 15px;
+            right: 13px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
+            color: #888;
             user-select: none;
+            transition: color 0.2s;
         }
 
-        .terms-group {
+        .toggle-password:hover { color: #2c5f7c; }
+
+        /* Remember + Forgot row */
+        .form-row {
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 25px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
         }
 
-        .terms-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-top: 2px;
+        .remember-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
             cursor: pointer;
+            accent-color: #1e3a5f;
         }
 
-        .terms-group label {
+        .remember-group label {
             font-size: 13px;
-            color: #666;
+            color: #444;
             cursor: pointer;
-            line-height: 1.4;
         }
 
-        .terms-group label a {
-            color: #2c5f7c;
+        .forgot-link {
+            font-size: 13px;
+            color: #1e3a5f;
+            font-weight: 600;
             text-decoration: none;
+            transition: opacity 0.2s;
         }
 
-        .create-account-btn {
+        .forgot-link:hover { opacity: 0.7; text-decoration: underline; }
+
+        /* Login Button */
+        .btn-login {
             width: 100%;
-            padding: 15px;
+            padding: 14px;
             background-color: #1e3a5f;
             color: white;
             border: none;
             border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 17px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.15s;
+            font-family: inherit;
+            letter-spacing: 0.3px;
         }
 
-        .create-account-btn:hover {
+        .btn-login:hover {
             background-color: #2c5f7c;
+            transform: translateY(-1px);
         }
 
-        .create-account-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .login-link {
+        /* Register link */
+        .register-link {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 18px;
             font-size: 14px;
-            color: #666;
+            color: #555;
         }
 
-        .login-link a {
+        .register-link a {
             color: #1e3a5f;
+            font-weight: 700;
             text-decoration: none;
-            font-weight: 600;
+            transition: opacity 0.2s;
         }
 
-        /* Footer Styles */
+        .register-link a:hover { opacity: 0.75; text-decoration: underline; }
+
+        /* Django messages */
+        .messages-list {
+            margin-bottom: 16px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .message-item {
+            padding: 10px 14px;
+            border-radius: 7px;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .message-item.error { background: #fde8e8; color: #c0392b; border: 1px solid #f5c6cb; }
+        .message-item.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .message-item.info { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+
+        /* Field-level errors */
+        .field-errors {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #c0392b;
+        }
+
+        /* ===== FOOTER ===== */
         .footer {
             background-color: #2c5f7c;
-            padding: 40px 50px 20px;
+            padding: 35px 50px 20px;
             color: white;
         }
 
         .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
 
-        .footer-column {
-            flex: 1;
-        }
+        .footer-column { flex: 1; }
 
-        .footer-column h3 {
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 10px;
-        }
+        .footer-column ul li { margin-bottom: 9px; }
 
         .footer-column ul li a {
             color: white;
@@ -344,290 +392,407 @@
             transition: opacity 0.3s;
         }
 
-        .footer-column ul li a:hover {
-            opacity: 0.7;
-        }
+        .footer-column ul li a:hover { opacity: 0.7; text-decoration: underline; }
 
-        .footer-right {
-            text-align: right;
-        }
+        .footer-right { text-align: right; flex: 1; }
 
         .social-icons {
             display: flex;
-            gap: 15px;
+            gap: 14px;
             justify-content: flex-end;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
-        .social-icons a {
+        .social-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            font-size: 24px;
+            font-size: 15px;
+            font-weight: 700;
+            transition: background-color 0.3s;
             text-decoration: none;
-            transition: opacity 0.3s;
         }
 
-        .social-icons a:hover {
-            opacity: 0.7;
-        }
+        .social-icon:hover { background-color: rgba(255,255,255,0.3); }
 
         .payment-icons {
             display: flex;
-            gap: 10px;
+            gap: 7px;
             justify-content: flex-end;
             flex-wrap: wrap;
         }
 
         .payment-icon {
             background-color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #333;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #1e3a5f;
+            letter-spacing: 0.5px;
         }
+
+        .payment-icon.visa { color: #1a1f71; }
+        .payment-icon.mc { color: #eb001b; }
+        .payment-icon.diners { color: #0079be; }
+        .payment-icon.discover { color: #ff6000; }
 
         .footer-bottom {
             background-color: #1e3a5f;
-            padding: 15px 50px;
-            text-align: center;
-            font-size: 14px;
-            color: white;
+            padding: 14px 50px;
             display: flex;
             justify-content: space-between;
+            font-size: 14px;
+            color: white;
         }
 
-        @media (max-width: 968px) {
-            .registration-container {
-                flex-direction: column;
-            }
+        .footer-bottom-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            .illustration {
-                display: none;
-            }
+        /* ===== RESPONSIVE ===== */
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
 
-            .top-header {
-                flex-direction: column;
-                gap: 15px;
-            }
+        .toast {
+            min-width: 300px;
+            max-width: 380px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            overflow: hidden;
+            pointer-events: all;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease;
+        }
 
-            .nav-bar {
-                flex-direction: column;
-                padding: 10px;
-            }
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
 
-            .footer-content {
+        .toast-body {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 18px 14px;
+        }
+
+        .toast-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .toast-text { flex: 1; }
+
+        .toast-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .toast-msg {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #aaa;
+            padding: 0;
+            line-height: 1;
+            flex-shrink: 0;
+            transition: color 0.2s;
+        }
+
+        .toast-close:hover { color: #555; }
+
+        .toast-bar {
+            height: 4px;
+            width: 100%;
+            border-radius: 0 0 12px 12px;
+            animation: toastTimer 4s linear forwards;
+        }
+
+        .toast.success .toast-bar { background: #2e7d32; }
+        .toast.success .toast-title { color: #2e7d32; }
+        .toast.error .toast-bar { background: #c0392b; }
+        .toast.error .toast-title { color: #c0392b; }
+        .toast.info .toast-bar { background: #1565c0; }
+        .toast.info .toast-title { color: #1565c0; }
+
+        @keyframes toastTimer {
+            from { width: 100%; }
+            to   { width: 0%; }
+        }
+
+        @media (max-width: 900px) {
+            .page-container {
                 flex-direction: column;
                 gap: 30px;
             }
 
-            .footer-right {
-                text-align: left;
+            .illustration { display: none; }
+
+            .form-card {
+                flex: unset;
+                width: 100%;
+                max-width: 480px;
             }
 
-            .social-icons,
-            .payment-icons {
-                justify-content: flex-start;
-            }
+            .top-header { flex-direction: column; gap: 14px; padding: 14px 20px; }
+            .nav-bar { flex-direction: column; padding: 10px 20px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+            .footer-content { flex-direction: column; gap: 24px; }
+            .footer-right { text-align: left; }
+            .social-icons, .payment-icons { justify-content: flex-start; }
         }
     </style>
 </head>
 <body>
-    <!-- Top Header -->
-    <div class="top-header">
-        <div class="logo">BooksMart</div>
-        <div class="search-container">
-            <input type="text" placeholder="Search">
-            <button>🔍</button>
-        </div>
-        <button class="login-register-btn">Login/Register</button>
-    </div>
 
-    <!-- Navigation Bar -->
-    <nav class="nav-bar">
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#" class="dropdown">Genres</a></li>
-            <li><a href="#">Bestsellers</a></li>
-            <li><a href="#">New Arrivals</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- ===== TOP HEADER ===== -->
+    <header class="top-header" id="top-header">
+        <a href="{% url 'home-page' %}" class="logo" id="logo" aria-label="BooksMart home">
+            <img src="/static/images/logo.png" alt="BooksMart logo">
+        </a>
+        <div class="search-container" id="search-bar">
+            <input type="text" placeholder="Search" id="search-input" aria-label="Search books">
+            <button id="search-btn" aria-label="Search">🔍</button>
+        </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="login-register-btn" id="login-register-btn">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="login-register-btn" id="login-register-btn">Login/Register</a>
+        {% endif %}
+    </header>
+
+    <!-- ===== NAVIGATION BAR ===== -->
+    <nav class="nav-bar" id="main-nav">
+        <ul class="nav-links" id="nav-links">
+            <li><a href="{% url 'home-page' %}" id="nav-home" class="active">Home</a></li>
+            <li><a href="#" id="nav-genres">Genres ▾</a></li>
+            <li><a href="#" id="nav-bestsellers">Bestsellers</a></li>
+            <li><a href="#" id="nav-newarrivals">New Arrivals</a></li>
+            <li><a href="#" id="nav-aboutus">About Us</a></li>
+            <li><a href="{% url 'contact' %}" id="nav-contact">Contact</a></li>
         </ul>
-        <a href="#" class="my-account">My Account</a>
+        <a href="#" class="my-account-link" id="nav-myaccount">My Account</a>
     </nav>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="registration-container">
-            <!-- Left Illustration -->
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <div class="page-container">
+
+            <!-- Left: Illustration -->
             <div class="illustration">
+                <div class="welcome-text">Welcome Back!</div>
                 <div class="illustration-circle">
-                    <div class="illustration-content">
-                        📚<br>👧<br>📖
-                    </div>
+                    <img src="/static/images/login_illustration.png" alt="Cozy reading room with a bookshelf and armchair">
                 </div>
             </div>
 
-            <!-- Registration Form -->
-            <div class="registration-form">
-                <h1>Join BooksMart Today</h1>
-                <form name="frm" method="post">
-                {% csrf_token %}
-                {{form.as_p}}
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
-            </div>
-        </div>
-    </div>
+            <!-- Right: Login Form Card -->
+            <div class="form-card">
+                <h1>Login to BooksMart</h1>
 
-    <!-- Footer -->
-    <footer class="footer">
+                <!-- Django messages -->
+                {% if messages %}
+                <ul class="messages-list">
+                    {% for message in messages %}
+                    <li class="message-item {{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                <form method="post" id="login-form">
+                    {% csrf_token %}
+
+                    <!-- Email/Username -->
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Email/Username</label>
+                        <input
+                            type="email"
+                            name="{{ form.email.html_name }}"
+                            id="{{ form.email.id_for_label }}"
+                            placeholder="Email/Username"
+                            value="{{ form.email.value|default:'' }}"
+                            autocomplete="email"
+                        >
+                        {% if form.email.errors %}
+                        <div class="field-errors">{{ form.email.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="{{ form.password.id_for_label }}">Password</label>
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                name="{{ form.password.html_name }}"
+                                id="{{ form.password.id_for_label }}"
+                                placeholder="Password"
+                                autocomplete="current-password"
+                            >
+                            <span class="toggle-password" onclick="togglePassword('{{ form.password.id_for_label }}')" title="Toggle password visibility">👁</span>
+                        </div>
+                        {% if form.password.errors %}
+                        <div class="field-errors">{{ form.password.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Remember Me + Forgot Password -->
+                    <div class="form-row">
+                        <div class="remember-group">
+                            <input type="checkbox" id="remember-me" name="remember_me">
+                            <label for="remember-me">Remember Me</label>
+                        </div>
+                        <a href="#" class="forgot-link" id="forgot-password-link">Forgot Password?</a>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-login" id="login-btn">Login</button>
+                </form>
+
+                <!-- Register redirect -->
+                <p class="register-link">
+                    New to BooksMart? <a href="{% url 'register' %}" id="register-redirect-link">Register</a>
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" id="footer">
         <div class="footer-content">
             <div class="footer-column">
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Genres</a></li>
-                    <li><a href="#">New Arrivals</a></li>
-                    <li><a href="#">About Us</a></li>
+                    <li><a href="#" id="footer-home">Home</a></li>
+                    <li><a href="#" id="footer-genres">Genres</a></li>
+                    <li><a href="#" id="footer-newarrivals">New Arrivals</a></li>
+                    <li><a href="#" id="footer-aboutus">About Us</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <ul>
-                    <li><a href="#">Genres</a></li>
-                    <li><a href="#">Bestsellers</a></li>
-                    <li><a href="#">New Arrivals</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#" id="footer-genres2">Genres</a></li>
+                    <li><a href="#" id="footer-bestsellers">Bestsellers</a></li>
+                    <li><a href="#" id="footer-newarrivals2">New Arrivals</a></li>
+                    <li><a href="{% url 'contact' %}" id="footer-contact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <ul>
-                    <li><a href="#">My Account</a></li>
-                    <li><a href="#">My Account</a></li>
+                    <li><a href="#" id="footer-myaccount">My Account</a></li>
+                    <li><a href="#" id="footer-myaccount2">My Account</a></li>
                 </ul>
             </div>
             <div class="footer-column footer-right">
                 <div class="social-icons">
-                    <a href="#">f</a>
-                    <a href="#">🐦</a>
-                    <a href="#">📷</a>
+                    <a href="#" class="social-icon" id="social-fb" aria-label="Facebook">f</a>
+                    <a href="#" class="social-icon" id="social-tw" aria-label="Twitter">𝕏</a>
+                    <a href="#" class="social-icon" id="social-ig" aria-label="Instagram">📷</a>
                 </div>
                 <div class="payment-icons">
-                    <div class="payment-icon">VISA</div>
-                    <div class="payment-icon">MC</div>
-                    <div class="payment-icon">DC</div>
-                    <div class="payment-icon">DISC</div>
+                    <div class="payment-icon visa">VISA</div>
+                    <div class="payment-icon mc">MC</div>
+                    <div class="payment-icon diners">DC</div>
+                    <div class="payment-icon discover">DISC</div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <div class="footer-bottom">
-        <div>© 2024 BooksMart</div>
-        <div>BooksMart</div>
+    <!-- Footer Bottom Strip -->
+    <div class="footer-bottom" id="footer-bottom">
+        <div class="footer-bottom-inner">
+            <div>© 2024 BooksMart</div>
+            <div>BooksMart</div>
+        </div>
     </div>
 
     <script>
-        // Password strength indicator
-        const passwordInput = document.getElementById('id_password1');
-        const strengthBars = document.querySelectorAll('.strength-bar');
-
-        passwordInput.addEventListener('input', function() {
-            const password = this.value;
-            let strength = 0;
-
-            if (password.length >= 6) strength++;
-            if (password.length >= 10) strength++;
-            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
-            if (/\d/.test(password) && /[!@#$%^&*]/.test(password)) strength++;
-
-            strengthBars.forEach((bar, index) => {
-                if (index < strength) {
-                    bar.classList.add('active');
-                } else {
-                    bar.classList.remove('active');
-                }
-            });
-        });
-
-        // Toggle password visibility
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);
-            if (field.type === 'password') {
-                field.type = 'text';
-            } else {
-                field.type = 'password';
+            if (field) {
+                field.type = field.type === 'password' ? 'text' : 'password';
             }
         }
 
-        // Form validation
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // ===== TOAST SYSTEM =====
+        function showToast(type, title, message) {
+            var icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            var container = document.getElementById('toast-container');
+            var toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.innerHTML =
+                '<div class="toast-body">' +
+                    '<span class="toast-icon">' + (icons[type] || 'ℹ️') + '</span>' +
+                    '<div class="toast-text">' +
+                        '<div class="toast-title">' + title + '</div>' +
+                        '<div class="toast-msg">' + message + '</div>' +
+                    '</div>' +
+                    '<button class="toast-close" onclick="dismissToast(this.closest(\'div.toast\'))">✕</button>' +
+                '</div>' +
+                '<div class="toast-bar"></div>';
+            container.appendChild(toast);
+            // Trigger animation
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() { toast.classList.add('show'); });
+            });
+            // Auto-dismiss after 4.5s
+            setTimeout(function() { dismissToast(toast); }, 4500);
+        }
 
-            const fullName = document.getElementById('id_Full_name').value;
-            const email = document.getElementById('id_email').value;
-            const mobile = document.getElementById('id_mobile').value;
-            const password = document.getElementById('id_password1').value;
-            const confirmPassword = document.getElementById('id_password2').value;
-            const terms = document.getElementById('terms').checked;
+        function dismissToast(toast) {
+            if (!toast) return;
+            toast.classList.remove('show');
+            setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 400);
+        }
 
-            // Validate fields
-            if (!fullName || !email || !mobile || !password || !confirmPassword) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            // Validate mobile number (10 digits)
-            const mobilePattern = /^\d{10}$/;
-            if (!mobilePattern.test(mobile)) {
-                alert('Please enter a valid 10-digit mobile number');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                alert('Passwords do not match');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters long');
-                return;
-            }
-
-            if (!terms) {
-                alert('Please accept the terms and privacy policy');
-                return;
-            }
-
-            // If all validations pass
-            alert('Registration successful! (This is just a demo - not connected to Django yet)');
-            
-            // Reset form
-            this.reset();
-            strengthBars.forEach(bar => bar.classList.remove('active'));
-        });
-
-        // Email validation
-        document.getElementById('id_email').addEventListener('blur', function() {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (this.value && !emailPattern.test(this.value)) {
-                this.style.borderColor = 'red';
-                alert('Please enter a valid email address');
-            } else {
-                this.style.borderColor = '';
-            }
-        });
-
-        // Mobile validation
-        document.getElementById('id_mobile').addEventListener('input', function() {
-            this.value = this.value.replace(/\D/g, ''); // Only allow digits
-        });
-
-        document.getElementById('id_mobile').addEventListener('blur', function() {
-            const mobilePattern = /^\d{10}$/;
-            if (this.value && !mobilePattern.test(this.value)) {
-                this.style.borderColor = 'red';
-            } else {
-                this.style.borderColor = '';
-            }
+        // Render Django messages as toasts on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            var msgs = [
+                {% for message in messages %}
+                { type: '{{ message.tags }}', text: '{{ message|escapejs }}' },
+                {% endfor %}
+            ];
+            var titles = { success: 'Success', error: 'Error', info: 'Info', warning: 'Warning' };
+            msgs.forEach(function(m) {
+                var tag = m.type.split(' ')[0]; // handle 'messages error' compound tags
+                if (tag === 'messages') tag = m.type.split(' ')[1] || 'info';
+                showToast(tag, titles[tag] || 'Notice', m.text);
+            });
         });
     </script>
 </body>
