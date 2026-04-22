@@ -32,6 +32,7 @@ admin.site.register(User, CustomUserAdmin)
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
+    ordering = ('name',)
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):

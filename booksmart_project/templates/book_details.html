@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/book_details.css">
+
+<!-- ===== BREADCRUMB ===== -->
+<nav class="breadcrumb-bar" id="breadcrumb-bar">
+    <div class="breadcrumb-inner">
+        <a href="{% url 'home-page' %}" class="breadcrumb-link" id="breadcrumb-home">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current" id="breadcrumb-title">{{ book.title }}</span>
+    </div>
+</nav>
+
+<!-- ===== BOOK DETAILS SECTION ===== -->
+<section class="book-details-section" id="book-details-section">
+    <div class="book-details-container">
+        <!-- LEFT: Book Image -->
+        <div class="book-image-column" id="book-image-column">
+            <div class="book-image-card">
+                {% if book.image %}
+                <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-main-image" id="book-main-image">
+                {% else %}
+                <img src="/static/images/1mYqFpw2cpyRC8kPYNHKlu1v26A.avif" alt="{{ book.title }}" class="book-main-image" id="book-main-image">
+                {% endif %}
+                <div class="image-badge" id="image-badge">
+                    <span class="badge-genre">{{ book.genre.name }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Book Info -->
+        <div class="book-info-column" id="book-info-column">
+            <div class="book-info-card">
+                <h1 class="book-title" id="book-title">{{ book.title }}</h1>
+                <p class="book-author" id="book-author">by <span>{{ book.author }}</span></p>
+
+                <!-- Rating -->
+                <div class="book-rating-row" id="book-rating-row">
+                    <div class="star-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <span class="rating-text">4.0 out of 5</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Price -->
+                <div class="price-block" id="price-block">
+                    <span class="price-label">Price</span>
+                    <span class="price-value">₹{{ book.price }}</span>
+                    <span class="price-note">Inclusive of all taxes</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Book Meta Info -->
+                <div class="book-meta-grid" id="book-meta-grid">
+                    <div class="meta-item">
+                        <span class="meta-icon">📖</span>
+                        <div class="meta-detail">
+                            <span class="meta-label">Publisher</span>
+                            <span class="meta-value">{{ book.publisher }}</span>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📅</span>
+                        <div class="meta-detail">
+                            <span class="meta-label">Published</span>
+                            <span class="meta-value">{{ book.published_date|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🏷️</span>
+                        <div class="meta-detail">
+                            <span class="meta-label">Genre</span>
+                            <span class="meta-value">{{ book.genre.name }}</span>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🔢</span>
+                        <div class="meta-detail">
+                            <span class="meta-label">ISBN</span>
+                            <span class="meta-value">{{ book.isbn }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons" id="action-buttons">
+                    <button class="btn-add-to-cart" id="btn-add-to-cart">
+                        <span class="btn-icon">🛒</span>
+                        Add to Cart
+                    </button>
+                    <button class="btn-wishlist" id="btn-wishlist">
+                        <span class="btn-icon">♡</span>
+                        Wishlist
+                    </button>
+                </div>
+
+                <!-- Delivery Info -->
+                <div class="delivery-info" id="delivery-info">
+                    <div class="delivery-item">
+                        <span class="delivery-icon">🚚</span>
+                        <span>Free delivery on orders above ₹499</span>
+                    </div>
+                    <div class="delivery-item">
+                        <span class="delivery-icon">↩️</span>
+                        <span>10-day easy returns</span>
+                    </div>
+                    <div class="delivery-item">
+                        <span class="delivery-icon">🔒</span>
+                        <span>Secure payment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== DESCRIPTION / ABOUT SECTION ===== -->
+<section class="book-description-section" id="book-description-section">
+    <div class="description-container">
+        <!-- Tabs -->
+        <div class="detail-tabs" id="detail-tabs">
+            <button class="tab-btn active" data-tab="description" id="tab-description">Description</button>
+            <button class="tab-btn" data-tab="details" id="tab-details">Product Details</button>
+        </div>
+
+        <!-- Tab: Description -->
+        <div class="tab-content active" id="content-description">
+            <div class="description-text">
+                <p>{{ book.description }}</p>
+            </div>
+        </div>
+
+        <!-- Tab: Product Details -->
+        <div class="tab-content" id="content-details">
+            <table class="details-table" id="details-table">
+                <tbody>
+                    <tr>
+                        <td class="detail-label">Title</td>
+                        <td class="detail-value">{{ book.title }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Author</td>
+                        <td class="detail-value">{{ book.author }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Publisher</td>
+                        <td class="detail-value">{{ book.publisher }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Published Date</td>
+                        <td class="detail-value">{{ book.published_date|date:"F d, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">ISBN</td>
+                        <td class="detail-value">{{ book.isbn }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Genre</td>
+                        <td class="detail-value">{{ book.genre.name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="detail-label">Price</td>
+                        <td class="detail-value">₹{{ book.price }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script src="/static/js/book_details.js"></script>
+{% endblock %}

@@ -1,15 +1,26 @@
+# Environment
 .env
-# C:\Users\abirc\Desktop\BookSmart\booksmart_project\booksmart_project\__pycache__
+
+# Python bytecode & caches
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Django
+db.sqlite3
+*.log
+
+# Testing / tooling caches
 .cache/
 .pytest_cache/
-*.egg-info/
 .mypy_cache/
 .coverage
-db.sqlite3
+*.egg-info/
 
-
-.openclaude-profile.json    
-
-
+# IDE / tooling
+.openclaude-profile.json

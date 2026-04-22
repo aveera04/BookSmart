@@ -1,11 +1,12 @@
 
+from urllib import request
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
 from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, PasswordChangeForm
-from .models import Book
+from .models import Book, Genre
 
 
 # Create your views here.
@@ -112,4 +113,10 @@ def profile(request):
     return render(request, 'profile.html', {
         'profile_form': profile_form,
         'password_form': password_form,
-    })
+    })
+
+def bookDetails(request):
+    if request.POST:
+        id=request.POST.get('id')
+        book=Book.objects.get(id=id)
+    return render(request, 'book_details.html', {'book': book})
