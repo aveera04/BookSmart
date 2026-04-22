@@ -1,9 +1,10 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, PasswordChangeForm
 from .models import Book
 
 
@@ -68,3 +69,47 @@ def contact(request):
     #         return redirect('contact')
 
     return render(request, 'contact.html')
+
+
+@login_required(login_url='login')
+def profile(request):
+    user = request.user
+    profile_form = ProfileUpdateForm(instance=user)
+    password_form = PasswordChangeForm()
+
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type', '')
+
+        if form_type == 'profile_update':
+            profile_form = ProfileUpdateForm(request.POST, instance=user)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Your profile has been updated successfully!')
+                return redirect('profile')
+            else:
+                for field, errors in profile_form.errors.items():
+                    for error in errors:
+                        messages.error(request, f'{error}')
+
+        elif form_type == 'password_change':
+            password_form = PasswordChangeForm(request.POST)
+            if password_form.is_valid():
+                current_password = password_form.cleaned_data['current_password']
+                new_password = password_form.cleaned_data['new_password']
+
+                if not user.check_password(current_password):
+                    messages.error(request, 'Your current password is incorrect.')
+                else:
+                    user.set_password(new_password)
+                    user.save()
+                    update_session_auth_hash(request, user)
+                    messages.success(request, 'Your password has been changed successfully!')
+                    return redirect('profile')
+            else:
+                for error in password_form.non_field_errors():
+                    messages.error(request, error)
+
+    return render(request, 'profile.html', {
+        'profile_form': profile_form,
+        'password_form': password_form,
+    })

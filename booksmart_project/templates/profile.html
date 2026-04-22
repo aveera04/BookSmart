@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="/static/css/profile.css">
+
+<section class="profile-page" id="profile-page">
+    <div class="profile-container">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="profile-sidebar" id="profile-sidebar">
+            <div class="sidebar-header">
+                <div class="avatar-circle" id="profile-avatar">
+                    {{ user.first_name|make_list|first|default:"U" }}{{ user.last_name|make_list|first|default:"" }}
+                </div>
+                <div class="sidebar-name" id="profile-sidebar-name">{{ user.first_name }} {{ user.last_name }}</div>
+                <div class="sidebar-email">{{ user.email }}</div>
+                <div class="member-badge">⭐ Member since {{ user.date_joined|date:"M Y" }}</div>
+            </div>
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <div class="sidebar-nav-item active" data-section="personal-info" id="nav-personal">
+                    <span class="nav-icon">👤</span> Personal Info
+                </div>
+                <div class="sidebar-nav-item" data-section="change-password" id="nav-password">
+                    <span class="nav-icon">🔒</span> Change Password
+                </div>
+                <div class="sidebar-divider"></div>
+                <div class="sidebar-nav-item" data-section="order-history" id="nav-orders">
+                    <span class="nav-icon">📦</span> Order History
+                    <span class="nav-badge">0</span>
+                </div>
+                <div class="sidebar-nav-item" data-section="my-wishlist" id="nav-wishlist">
+                    <span class="nav-icon">❤️</span> My Wishlist
+                </div>
+                <div class="sidebar-nav-item" data-section="my-addresses" id="nav-addresses">
+                    <span class="nav-icon">📍</span> My Addresses
+                </div>
+                <div class="sidebar-divider"></div>
+                <div class="sidebar-nav-item" data-section="account-settings" id="nav-settings">
+                    <span class="nav-icon">⚙️</span> Account Settings
+                </div>
+                <div class="sidebar-divider"></div>
+                <a href="{% url 'logout' %}" class="sidebar-nav-item danger" id="nav-logout">
+                    <span class="nav-icon">🚪</span> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div class="profile-main" id="profile-main">
+
+            <!-- Stats Row -->
+            <div class="stats-row" id="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon blue">📚</div>
+                    <div class="stat-info">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">❤️</div>
+                    <div class="stat-info">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Wishlist</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon amber">⭐</div>
+                    <div class="stat-info">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Reviews</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon rose">🎁</div>
+                    <div class="stat-info">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Rewards Pts</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: Personal Info ===== -->
+            <div class="profile-section" id="section-personal-info">
+                <div class="section-head">
+                    <div class="head-icon blue">👤</div>
+                    <div>
+                        <div class="section-title">Personal Information</div>
+                        <div class="section-subtitle">Manage your personal details and contact info</div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <form method="post" action="{% url 'profile' %}" id="profile-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="profile_update">
+                        <div class="form-grid">
+                            <div class="profile-field">
+                                <label for="id_first_name"><span class="label-icon">✏️</span> First Name</label>
+                                <input type="text" id="id_first_name" name="first_name"
+                                       value="{{ user.first_name }}" placeholder="Enter first name">
+                                {% if profile_form.first_name.errors %}
+                                    <div class="field-error">⚠ {{ profile_form.first_name.errors|join:", " }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="profile-field">
+                                <label for="id_last_name"><span class="label-icon">✏️</span> Last Name</label>
+                                <input type="text" id="id_last_name" name="last_name"
+                                       value="{{ user.last_name }}" placeholder="Enter last name">
+                                {% if profile_form.last_name.errors %}
+                                    <div class="field-error">⚠ {{ profile_form.last_name.errors|join:", " }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="profile-field">
+                                <label for="id_email"><span class="label-icon">📧</span> Email Address</label>
+                                <input type="email" id="id_email" name="email"
+                                       value="{{ user.email }}" disabled>
+                                <div class="field-hint">Email cannot be changed. Contact support for assistance.</div>
+                            </div>
+                            <div class="profile-field">
+                                <label for="id_mobile"><span class="label-icon">📱</span> Mobile Number</label>
+                                <input type="tel" id="id_mobile" name="mobile"
+                                       value="{{ user.mobile }}" placeholder="Enter mobile number">
+                                {% if profile_form.mobile.errors %}
+                                    <div class="field-error">⚠ {{ profile_form.mobile.errors|join:", " }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="profile-field">
+                                <label for="id_date_joined"><span class="label-icon">📅</span> Member Since</label>
+                                <input type="text" id="id_date_joined"
+                                       value="{{ user.date_joined|date:'F d, Y' }}" disabled>
+                            </div>
+                            <div class="profile-field">
+                                <label for="id_last_login"><span class="label-icon">🕐</span> Last Login</label>
+                                <input type="text" id="id_last_login"
+                                       value="{{ user.last_login|date:'F d, Y - h:i A' }}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="btn-reset-profile" onclick="this.form.reset()">Reset</button>
+                            <button type="submit" class="btn-primary" id="btn-save-profile">💾 Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: Change Password ===== -->
+            <div class="profile-section" id="section-change-password" style="display: none;">
+                <div class="section-head">
+                    <div class="head-icon green">🔒</div>
+                    <div>
+                        <div class="section-title">Change Password</div>
+                        <div class="section-subtitle">Update your password to keep your account secure</div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <form method="post" action="{% url 'profile' %}" id="password-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="password_change">
+                        <div class="form-grid">
+                            <div class="profile-field full-width">
+                                <label for="id_current_password"><span class="label-icon">🔑</span> Current Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="id_current_password" name="current_password"
+                                           placeholder="Enter current password" autocomplete="current-password">
+                                    <button type="button" class="toggle-pwd" onclick="togglePwd('id_current_password')">👁</button>
+                                </div>
+                            </div>
+                            <div class="profile-field">
+                                <label for="id_new_password"><span class="label-icon">🔐</span> New Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="id_new_password" name="new_password"
+                                           placeholder="Enter new password" autocomplete="new-password"
+                                           oninput="checkStrength(this.value)">
+                                    <button type="button" class="toggle-pwd" onclick="togglePwd('id_new_password')">👁</button>
+                                </div>
+                                <div class="password-strength" id="pwd-strength">
+                                    <div class="strength-bar" id="str-1"></div>
+                                    <div class="strength-bar" id="str-2"></div>
+                                    <div class="strength-bar" id="str-3"></div>
+                                    <div class="strength-bar" id="str-4"></div>
+                                </div>
+                                <div class="strength-text" id="strength-text">Enter a password</div>
+                            </div>
+                            <div class="profile-field">
+                                <label for="id_confirm_password"><span class="label-icon">🔐</span> Confirm New Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="id_confirm_password" name="confirm_password"
+                                           placeholder="Confirm new password" autocomplete="new-password">
+                                    <button type="button" class="toggle-pwd" onclick="togglePwd('id_confirm_password')">👁</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="btn-reset-password" onclick="this.form.reset(); resetStrength();">Cancel</button>
+                            <button type="submit" class="btn-green" id="btn-change-password">🔒 Update Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: Order History ===== -->
+            <div class="profile-section" id="section-order-history" style="display: none;">
+                <div class="section-head">
+                    <div class="head-icon amber">📦</div>
+                    <div>
+                        <div class="section-title">Order History</div>
+                        <div class="section-subtitle">Track and manage your book orders</div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <div class="empty-text">No orders yet</div>
+                        <div class="empty-sub">Your order history will appear here once you make a purchase.</div>
+                        <a href="{% url 'home-page' %}" class="btn-primary" style="display: inline-block; margin-top: 16px; text-decoration: none;">Browse Books</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: Wishlist ===== -->
+            <div class="profile-section" id="section-my-wishlist" style="display: none;">
+                <div class="section-head">
+                    <div class="head-icon rose">❤️</div>
+                    <div>
+                        <div class="section-title">My Wishlist</div>
+                        <div class="section-subtitle">Books you've saved for later</div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="empty-state">
+                        <div class="empty-icon">❤️</div>
+                        <div class="empty-text">Your wishlist is empty</div>
+                        <div class="empty-sub">Start adding books you love to see them here.</div>
+                        <a href="{% url 'home-page' %}" class="btn-primary" style="display: inline-block; margin-top: 16px; text-decoration: none;">Explore Books</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: Addresses ===== -->
+            <div class="profile-section" id="section-my-addresses" style="display: none;">
+                <div class="section-head">
+                    <div class="head-icon purple">📍</div>
+                    <div>
+                        <div class="section-title">My Addresses</div>
+                        <div class="section-subtitle">Manage your delivery addresses</div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="empty-state">
+                        <div class="empty-icon">📍</div>
+                        <div class="empty-text">No saved addresses</div>
+                        <div class="empty-sub">Add a delivery address for faster checkout.</div>
+                        <button class="btn-primary" style="margin-top: 16px;" id="btn-add-address">+ Add New Address</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: Account Settings ===== -->
+            <div class="profile-section" id="section-account-settings" style="display: none;">
+                <div class="section-head">
+                    <div class="head-icon blue">⚙️</div>
+                    <div>
+                        <div class="section-title">Account Settings</div>
+                        <div class="section-subtitle">Configure your preferences and notifications</div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-left">
+                                <div class="setting-icon">📧</div>
+                                <div class="setting-text">
+                                    <div class="setting-name">Email Notifications</div>
+                                    <div class="setting-desc">Receive order updates and promotions via email</div>
+                                </div>
+                            </div>
+                            <label class="toggle-switch" id="toggle-email-notifications">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-left">
+                                <div class="setting-icon">📱</div>
+                                <div class="setting-text">
+                                    <div class="setting-name">SMS Notifications</div>
+                                    <div class="setting-desc">Get delivery updates via text message</div>
+                                </div>
+                            </div>
+                            <label class="toggle-switch" id="toggle-sms-notifications">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-left">
+                                <div class="setting-icon">🎯</div>
+                                <div class="setting-text">
+                                    <div class="setting-name">Personalized Recommendations</div>
+                                    <div class="setting-desc">Get book suggestions based on your reading history</div>
+                                </div>
+                            </div>
+                            <label class="toggle-switch" id="toggle-recommendations">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-left">
+                                <div class="setting-icon">🌙</div>
+                                <div class="setting-text">
+                                    <div class="setting-name">Newsletter Subscription</div>
+                                    <div class="setting-desc">Monthly roundup of new releases and bestsellers</div>
+                                </div>
+                            </div>
+                            <label class="toggle-switch" id="toggle-newsletter">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-left">
+                                <div class="setting-icon">🛡️</div>
+                                <div class="setting-text">
+                                    <div class="setting-name">Two-Factor Authentication</div>
+                                    <div class="setting-desc">Add an extra layer of security to your account</div>
+                                </div>
+                            </div>
+                            <label class="toggle-switch" id="toggle-2fa">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid #f0f3f7;">
+                        <div class="section-title" style="font-size: 15px; color: #c0392b; margin-bottom: 8px;">Danger Zone</div>
+                        <p style="font-size: 13px; color: #8a95a5; margin-bottom: 14px;">
+                            Once you delete your account, there is no going back. Please be certain.
+                        </p>
+                        <button class="btn-danger" id="btn-delete-account">🗑️ Delete Account</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script src="/static/js/profile.js"></script>
+{% endblock %}

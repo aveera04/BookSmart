@@ -49,4 +49,50 @@ class LoginForm(forms.Form):
     password=forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control border-primary'})
     )
-    
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'mobile']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'placeholder': 'Enter first name'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Enter last name'}),
+            'mobile': forms.TextInput(attrs={'placeholder': 'Enter mobile number'}),
+        }
+
+    def clean_mobile(self):
+        mobile = self.cleaned_data.get('mobile', '').strip()
+        if mobile and not mobile.isdigit():
+            raise forms.ValidationError("Mobile number must contain only digits.")
+        if mobile and (len(mobile) < 10 or len(mobile) > 12):
+            raise forms.ValidationError("Mobile number must be 10-12 digits.")
+        return mobile
+
+
+class PasswordChangeForm(forms.Form):
+    current_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Enter current password'}),
+        label="Current Password"
+    )
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Enter new password'}),
+        label="New Password"
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm new password'}),
+        label="Confirm New Password"
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_pwd = cleaned_data.get('new_password')
+        confirm_pwd = cleaned_data.get('confirm_password')
+
+        if new_pwd and confirm_pwd and new_pwd != confirm_pwd:
+            raise forms.ValidationError("New passwords do not match.")
+
+        if new_pwd and len(new_pwd) < 6:
+            raise forms.ValidationError("New password must be at least 6 characters long.")
+
+        return cleaned_data
