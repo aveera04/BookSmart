@@ -74,6 +74,9 @@ class Book(models.Model):
     published_date = models.DateField()
     image = models.ImageField(upload_to='book_images/', null=True, blank=True,verbose_name="Book Image")
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE, related_name='books')
+    newArrival = models.BooleanField(default=True, verbose_name="New Arrival")
+    bestseller = models.BooleanField(default=False, verbose_name="Bestseller")
+    rating = models.DecimalField(max_digits=5, decimal_places=1, default=0.00)
     def __str__(self):
         return self.title
     
@@ -84,3 +87,25 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
+    
+class CartItem(models.Model):
+    product = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('product', 'user')  # prevent duplicates
+
+    def __str__(self):
+        return f'{self.quantity} x {self.product.name}'
+    
+
+class Order(models.Model):
+    product = models.ForeignKey(Book, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_ordered = models.DateTimeField(auto_now_add=True)
+    payment_status=models.CharField(max_length=255)
+    payment_id=models.CharField(max_length=255)
+    address=models.TextField()

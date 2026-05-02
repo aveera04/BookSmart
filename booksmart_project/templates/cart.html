@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% block content %}
+ <div class="container">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Preview</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td><img src="{{ item.product.image.url }}" width="100" height="100"></td>
+                        <td>{{ item.product }}</td>
+                        <td>₹{{ item.product.price }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'update_cart' item.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="5" style="width:60px;">
+                                <button type="submit" class="btn btn-sm btn-info">Update</button>
+                            </form>
+                        </td>
+                        <td>₹{{ item.quantity | mul:item.product.price}}</td>
+                        <td>
+                            <form method="POST" action="{% url 'delete_cart_item' item.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-right"><strong>Cart Total</strong></td>
+                        <td><strong>₹{{total_price}}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Payment Section -->
+        <div class="cart_total_inner">
+            <div class="col-lg-12">
+                <form id="payment-form" name="payment-form">
+                    {% csrf_token %}
+                    <textarea name="address" id="address" cols="30" rows="3" class="form-control" placeholder="Enter Delivery Address"></textarea>
+                    <!-- Hidden Amount Input -->
+                    <input type="hidden" id="tamount" name="tamount" value="{{ total_price }}">
+                    <br>
+                    <button type="button" id="pay-button">Pay Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+            $(document).ready(function() {
+                $("#pay-button").click(function(e) {
+                    e.preventDefault();
+
+                    const amount = $("#tamount").val();
+                    const address = $("#address").val().trim();
+                    // alert(amount)
+                    // Validation
+                    if (!address) {
+                        alert("Please enter your delivery address.");
+                        return;
+                    }
+
+                    if (!amount || parseInt(amount) <= 0) {
+                        alert("Cart is empty. Please add items before making payment.");
+                        return;
+                    }
+
+                    // Make an AJAX request to initiate the payment
+                    $.ajax({
+                        type: "POST",
+                        url: "/initiate-payment/",
+                        data: { amount: amount, address: address },
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+                        },
+                        success: function(data) {
+                            // alert(data)
+                            const options = {
+                                key: data.key,
+                                amount: data.amount,
+                                currency: data.currency,
+                                order_id: data.id,
+                                name: data.name,
+                                description: data.description,
+                                image: data.image,
+                                handler: function(response) {
+                                    if (response.razorpay_payment_id) {
+                                        window.location.href = "/payment-success/";
+                                    } else {
+                                        alert('Payment failed');
+                                    }
+                                },
+                                prefill: {
+                                    name: "Card Holder Name",
+                                },
+                            };
+
+                            const rzp = new Razorpay(options);
+                            rzp.open();
+                        },
+                        error: function(error) {
+                            console.error("Error initiating payment:", error);
+                        }
+                    });
+                });
+            });
+
+        </script>
+{% endblock %}

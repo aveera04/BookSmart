@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="books-section" id="bestsellers-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>{{ genre.name }} Books</h2>
+                <div class="carousel-nav">
+                    <button class="carousel-btn" id="bestseller-prev" aria-label="Previous bestsellers">&#8249;</button>
+                    <button class="carousel-btn" id="bestseller-next" aria-label="Next bestsellers">&#8250;</button>
+                </div>
+            </div>
+            <div class="carousel-wrapper" id="bestsellers-carousel">
+                <div class="carousel-track" id="bestsellers-track">
+                    <!-- Card 1 -->
+                     {% for book in books %}
+                        <div class="bestseller-card" id="bestseller-card-1">
+                        <img src="{{ book.image.url }}" alt="{{ book.title }}" class="card-img">
+                        <div class="card-title">{{ book.title }}</div>
+                        <div class="card-rating">★★★★★</div>
+                        <form method="post" action="{% url 'bookdetails' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ book.id }}">
+                            <button class="btn-add-cart" id="cart-featured-{{ forloop.counter }}">Details</button>
+                        </form>
+                    </div>
+                    {% empty %}
+                        <p>No books in this genre.</p>
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    
+    <!-- <button type="submit" class="btn-add-cart">Add to Cart</button> -->
+{% endblock %}

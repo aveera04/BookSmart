@@ -34,7 +34,16 @@
     <nav class="nav-bar" id="main-nav">
         <ul class="nav-links" id="nav-links">
             <li><a href="{% url 'home-page' %}" class="nav-link {% if current_url == 'home-page' %}active{% endif %}" id="nav-home">Home</a></li>
-            <li><a href="#" id="nav-genres">Genres ▾</a></li>
+            <li class="dropdown">
+                <a href="#" class="nav-link" id="nav-genres">Genres ▾</a>
+                <ul class="dropdown-menu" aria-label="Genres">
+                    {% for genre in genres %}
+                    <li><a href="{% url 'genre-books' genre.id %}">{{ genre.name }}</a></li>
+                    {% empty %}
+                    <li><span class="dropdown-empty">No genres available</span></li>
+                    {% endfor %}
+                </ul>
+            </li>
             <li><a href="#" id="nav-bestsellers">Bestsellers</a></li>
             <li><a href="#" id="nav-newarrivals">New Arrivals</a></li>
             <li><a href="#" id="nav-aboutus">About Us</a></li>

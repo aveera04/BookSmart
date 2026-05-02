@@ -4,9 +4,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.http import JsonResponse
+import razorpay
 
 from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, PasswordChangeForm
-from .models import Book, Genre
+from .models import Book, Genre, CartItem, Order
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -120,3 +125,97 @@ def bookDetails(request):
         id=request.POST.get('id')
         book=Book.objects.get(id=id)
     return render(request, 'book_details.html', {'book': book})
+
+def add_to_cart(request, id):
+	if request.user.is_authenticated:
+		product = Book.objects.get(id=id)
+		cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
+		cart_item.quantity += 1
+		cart_item.save()
+		return redirect('crtpage')
+	else:
+		return redirect('login')
+
+def view_cart(request):
+	if request.user.is_authenticated:
+		cart_items = CartItem.objects.filter(user=request.user)
+		total_price = sum(int(item.product.price) * item.quantity for item in cart_items)
+		total_price=int(total_price)
+		return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+	else:
+		return redirect('login')
+
+@login_required
+def update_cart(request, item_id):
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
+        cart_item.quantity = quantity
+        cart_item.save()
+        messages.success(request, "Cart updated successfully.")
+    return redirect('/cart')  # 'cart' is the name of the cart view
+
+@login_required
+def delete_cart_item(request, item_id):
+    if request.method == 'POST':
+        cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
+        cart_item.delete()
+        messages.success(request, "Item removed from cart.")
+    return redirect('/cart')
+
+
+def books_by_genre(request, genre_id):
+    genre = get_object_or_404(Genre, id=genre_id)
+    books = Book.objects.filter(genre=genre)
+
+    return render(request, 'genre_books.html', {
+        'genre': genre,
+        'books': books
+    })
+
+@login_required
+@csrf_exempt
+def initiate_payment(request):
+    if request.method == "POST":
+        amount = int(request.POST["amount"]) * 100  # Amount in paise
+        # print("Request data:", request.POST)
+        address=request.POST['address']
+        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+        payment_data = {
+            "amount": amount,
+            "currency": "INR",
+            "receipt": "order_receipt",
+            "notes": {
+                "email": "user_email@example.com",
+            },
+        }
+
+        order = client.order.create(data=payment_data)
+
+    #     # Include key, name, description, and image in the JSON response
+        response_data = {
+            "id": order["id"],
+            "amount": order["amount"],
+            "currency": order["currency"],
+            "key": settings.RAZORPAY_API_KEY,
+            "name": "Books Mart",
+            "description": "Payment for Your Order",
+            "image": "https://yourwebsite.com/logo.png",  # Replace with your logo URL
+        }
+        cart_items=CartItem.objects.filter(user=request.user)
+        # payment_id=response_data.id
+        for cart in cart_items:
+            Order.objects.get_or_create(user=request.user, product= cart.product, quantity=cart.quantity, payment_status='success', address=address)
+
+        CartItem.objects.filter(user=request.user).delete()
+
+        return JsonResponse(response_data)
+    return redirect('/payment-success')
+
+
+def payment_success(request):
+    return render(request, "payment_success.html")
+
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by("-date_ordered")
+    return render(request, "my_orders.html", {"orders": orders})

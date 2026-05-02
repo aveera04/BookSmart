@@ -81,6 +81,42 @@ navLinks.forEach(function(link) {
     });
 });
 
+// ===== NAV GENRE DROPDOWN POSITIONING =====
+const genreTrigger = document.getElementById('nav-genres');
+const genreMenu = document.querySelector('.dropdown-menu');
+
+function measureMenuWidth(menu) {
+    const prevDisplay = menu.style.display;
+    const prevVisibility = menu.style.visibility;
+    menu.style.visibility = 'hidden';
+    menu.style.display = 'block';
+    const width = menu.offsetWidth || 220;
+    menu.style.display = prevDisplay;
+    menu.style.visibility = prevVisibility;
+    return width;
+}
+
+function positionGenreMenu() {
+    if (!genreTrigger || !genreMenu) {
+        return;
+    }
+    const rect = genreTrigger.getBoundingClientRect();
+    const menuWidth = measureMenuWidth(genreMenu);
+    const gutter = 12;
+    const maxLeft = Math.max(gutter, window.innerWidth - menuWidth - gutter);
+    const left = Math.min(rect.left, maxLeft);
+    const top = rect.bottom + 8;
+    genreMenu.style.setProperty('--dropdown-top', top + 'px');
+    genreMenu.style.setProperty('--dropdown-left', left + 'px');
+}
+
+if (genreTrigger && genreMenu) {
+    ['mouseenter', 'focus'].forEach(function(evt) {
+        genreTrigger.addEventListener(evt, positionGenreMenu);
+    });
+    window.addEventListener('resize', positionGenreMenu);
+}
+
 // ===== ADD TO CART FEEDBACK =====
 const cartBtns = document.querySelectorAll('.btn-add-cart');
 cartBtns.forEach(function(btn) {
