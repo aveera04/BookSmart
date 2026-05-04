@@ -1,5 +1,7 @@
 
 from urllib import request
+import dotenv
+import os
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -13,7 +15,7 @@ from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, PasswordChang
 from .models import Book, Genre, CartItem, Order
 from django.shortcuts import get_object_or_404
 
-
+dotenv.load_dotenv()
 # Create your views here.
 def home(request):
     all_books = Book.objects.all()
@@ -180,7 +182,7 @@ def initiate_payment(request):
         amount = int(request.POST["amount"]) * 100  # Amount in paise
         # print("Request data:", request.POST)
         address=request.POST['address']
-        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+        client = razorpay.Client(auth=(os.getenv('RAZORPAY_API_KEY'), os.getenv('RAZORPAY_API_SECRET')))
         payment_data = {
             "amount": amount,
             "currency": "INR",
@@ -197,7 +199,7 @@ def initiate_payment(request):
             "id": order["id"],
             "amount": order["amount"],
             "currency": order["currency"],
-            "key": settings.RAZORPAY_API_KEY,
+            "key": os.getenv('RAZORPAY_API_KEY'),
             "name": "Books Mart",
             "description": "Payment for Your Order",
             "image": "https://yourwebsite.com/logo.png",  # Replace with your logo URL

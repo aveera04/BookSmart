@@ -180,3 +180,62 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+$(document).ready(function() {
+                $("#pay-button").click(function(e) {
+                    e.preventDefault();
+
+                    const amount = $("#tamount").val();
+                    const address = $("#address").val().trim();
+                    // alert(amount)
+                    // Validation
+                    if (!address) {
+                        alert("Please enter your delivery address.");
+                        return;
+                    }
+
+                    if (!amount || parseInt(amount) <= 0) {
+                        alert("Cart is empty. Please add items before making payment.");
+                        return;
+                    }
+
+                    // Make an AJAX request to initiate the payment
+                    $.ajax({
+                        type: "POST",
+                        url: "/initiate-payment/",
+                        data: { amount: amount, address: address },
+                        dataType: "json",
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+                        },
+                        success: function(data) {
+                            // alert(data)
+                            const options = {
+                                key: data.key,
+                                amount: data.amount,
+                                currency: data.currency,
+                                order_id: data.id,
+                                name: data.name,
+                                description: data.description,
+                                image: data.image,
+                                handler: function(response) {
+                                    if (response.razorpay_payment_id) {
+                                        window.location.href = "/payment-success/";
+                                    } else {
+                                        alert('Payment failed');
+                                    }
+                                },
+                                prefill: {
+                                    name: "Card Holder Name",
+                                },
+                            };
+
+                            const rzp = new Razorpay(options);
+                            rzp.open();
+                        },
+                        error: function(error) {
+                            console.error("Error initiating payment:", error);
+                        }
+                    });
+                });
+            });
