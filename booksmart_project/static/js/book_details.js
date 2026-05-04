@@ -1,4 +1,4 @@
-// ===== Book Details Page JavaScript =====
+//  ===== Book Details Page JavaScript =====
 
 document.addEventListener('DOMContentLoaded', function () {
 

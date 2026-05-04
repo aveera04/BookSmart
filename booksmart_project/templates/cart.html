@@ -1,125 +1,193 @@
 {% extends 'base.html' %}
 {% load mathfilters %}
+
 {% block content %}
- <div class="container">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Preview</th>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in cart_items %}
-                    <tr>
-                        <td><img src="{{ item.product.image.url }}" width="100" height="100"></td>
-                        <td>{{ item.product }}</td>
-                        <td>₹{{ item.product.price }}</td>
-                        <td>
-                            <form method="POST" action="{% url 'update_cart' item.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="5" style="width:60px;">
-                                <button type="submit" class="btn btn-sm btn-info">Update</button>
-                            </form>
-                        </td>
-                        <td>₹{{ item.quantity | mul:item.product.price}}</td>
-                        <td>
-                            <form method="POST" action="{% url 'delete_cart_item' item.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4" class="text-right"><strong>Cart Total</strong></td>
-                        <td><strong>₹{{total_price}}</strong></td>
-                    </tr>
-                </tfoot>
-            </table>
+<link rel="stylesheet" href="/static/css/cart.css">
+
+<!-- ===== BREADCRUMB ===== -->
+<div class="cart-breadcrumb-bar" id="cart-breadcrumb">
+    <div class="cart-breadcrumb-inner">
+        <a href="{% url 'home-page' %}" class="cart-breadcrumb-link" id="breadcrumb-home">Home</a>
+        <span class="cart-breadcrumb-sep">›</span>
+        <span class="cart-breadcrumb-current">Shopping Cart</span>
+    </div>
+</div>
+
+<!-- ===== MAIN CART SECTION ===== -->
+<section class="cart-section" id="cart-section">
+    <div class="cart-page-container">
+
+        {% if cart_items %}
+        <!-- ===== PAGE HEADER ===== -->
+        <div class="cart-page-header" id="cart-page-header">
+            <div class="cart-page-title">
+                <span class="cart-icon-header">🛒</span>
+                <h1>Shopping Cart</h1>
+                <span class="cart-item-count" id="cart-item-count">{{ cart_items|length }} item{{ cart_items|length|pluralize }}</span>
+            </div>
+            <a href="{% url 'home-page' %}" class="cart-continue-btn" id="continue-shopping-btn">
+                ← Continue Shopping
+            </a>
         </div>
 
-        <!-- Payment Section -->
-        <div class="cart_total_inner">
-            <div class="col-lg-12">
-                <form id="payment-form" name="payment-form">
-                    {% csrf_token %}
-                    <textarea name="address" id="address" cols="30" rows="3" class="form-control" placeholder="Enter Delivery Address"></textarea>
-                    <!-- Hidden Amount Input -->
-                    <input type="hidden" id="tamount" name="tamount" value="{{ total_price }}">
-                    <br>
-                    <button type="button" id="pay-button">Pay Now</button>
-                </form>
+        <!-- ===== TWO-COLUMN LAYOUT ===== -->
+        <div class="cart-layout">
+
+            <!-- LEFT: CART ITEMS -->
+            <div class="cart-items-column" id="cart-items-column">
+                {% for item in cart_items %}
+                <div class="cart-item-card" id="cart-item-{{ item.id }}">
+                    <!-- Image -->
+                    <div class="cart-item-image-wrapper">
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="cart-item-image">
+                    </div>
+
+                    <!-- Details -->
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">{{ item.product.title }}</div>
+                        <div class="cart-item-author">by <span>{{ item.product.author }}</span></div>
+                        <div class="cart-item-price">
+                            ₹{{ item.product.price }}
+                            <span class="cart-item-price-each">each</span>
+                        </div>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div class="cart-item-quantity">
+                        <span class="cart-qty-label">Qty</span>
+                        <form method="POST" action="{% url 'update_cart' item.id %}" class="cart-qty-form" id="qty-form-{{ item.id }}">
+                            {% csrf_token %}
+                            <div class="cart-qty-controls">
+                                <button type="button" class="cart-qty-btn cart-qty-minus" aria-label="Decrease quantity">−</button>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="5" class="cart-qty-value" id="qty-input-{{ item.id }}">
+                                <button type="button" class="cart-qty-btn cart-qty-plus" aria-label="Increase quantity">+</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="cart-item-total">
+                        <span class="cart-total-label">Total</span>
+                        <span class="cart-total-value">₹{{ item.quantity|mul:item.product.price }}</span>
+                    </div>
+
+                    <!-- Delete -->
+                    <div class="cart-item-delete">
+                        <form method="POST" action="{% url 'delete_cart_item' item.id %}" class="cart-delete-form" data-item-name="{{ item.product.title }}" id="delete-form-{{ item.id }}">
+                            {% csrf_token %}
+                            <button type="submit" class="cart-delete-btn" aria-label="Remove {{ item.product.title }}" id="delete-btn-{{ item.id }}">
+                                🗑️
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- RIGHT: ORDER SUMMARY -->
+            <div class="cart-summary-column" id="cart-summary-column">
+                <div class="cart-summary-card" id="cart-summary-card">
+                    <div class="cart-summary-title">
+                        <span class="summary-icon">📋</span>
+                        Order Summary
+                    </div>
+
+                    <!-- Subtotal -->
+                    <div class="cart-summary-row" id="summary-subtotal">
+                        <span class="cart-summary-row-label">Subtotal ({{ cart_items|length }} item{{ cart_items|length|pluralize }})</span>
+                        <span class="cart-summary-row-value">₹{{ total_price }}</span>
+                    </div>
+
+                    <!-- Shipping -->
+                    <div class="cart-summary-row" id="summary-shipping">
+                        <span class="cart-summary-row-label">Shipping</span>
+                        <span class="cart-summary-row-value" style="color: #2e7d32; font-weight: 700;">FREE</span>
+                    </div>
+
+                    <div class="cart-summary-divider"></div>
+
+                    <!-- Grand Total -->
+                    <div class="cart-summary-row total" id="summary-total">
+                        <span class="cart-summary-row-label">Total</span>
+                        <span class="cart-summary-row-value">₹{{ total_price }}</span>
+                    </div>
+
+                    <!-- Savings -->
+                    <div class="cart-savings-badge" id="savings-badge">
+                        <span class="savings-icon">🎉</span>
+                        <span class="savings-text">You're saving on shipping!</span>
+                    </div>
+
+                    <!-- Coupon -->
+                    <div class="cart-coupon-section" id="coupon-section">
+                        <div class="cart-coupon-input-group">
+                            <input type="text" placeholder="Enter coupon code" class="cart-coupon-input" id="coupon-input">
+                            <button type="button" class="cart-coupon-apply-btn" id="coupon-apply-btn">Apply</button>
+                        </div>
+                    </div>
+
+                    <div class="cart-summary-divider"></div>
+
+                    <!-- Delivery Address -->
+                    <form id="payment-form" name="payment-form">
+                        {% csrf_token %}
+                        <div class="cart-delivery-section">
+                            <label for="address" class="cart-delivery-label">
+                                📍 Delivery Address
+                            </label>
+                            <textarea name="address" id="address" class="cart-delivery-textarea" placeholder="Enter your full delivery address (e.g., House No., Street, City, State, PIN)" rows="3"></textarea>
+                        </div>
+
+                        <!-- Hidden Amount -->
+                        <input type="hidden" id="tamount" name="tamount" value="{{ total_price }}">
+
+                        <!-- Pay Button -->
+                        <button type="button" id="pay-button" class="cart-pay-btn">
+                            <span class="cart-pay-icon">🔒</span>
+                            Pay Now — ₹{{ total_price }}
+                        </button>
+                    </form>
+
+                    <!-- Secure Badge -->
+                    <div class="cart-secure-badge" id="secure-badge">
+                        <span class="lock-icon">🛡️</span>
+                        Secure checkout powered by Razorpay
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="cart-trust-badges" id="trust-badges">
+                        <div class="trust-badge">
+                            <span class="trust-badge-icon">📦</span>
+                            <span class="trust-badge-text">Free<br>Shipping</span>
+                        </div>
+                        <div class="trust-badge">
+                            <span class="trust-badge-icon">🔄</span>
+                            <span class="trust-badge-text">Easy<br>Returns</span>
+                        </div>
+                        <div class="trust-badge">
+                            <span class="trust-badge-icon">✅</span>
+                            <span class="trust-badge-text">Genuine<br>Books</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        {% else %}
+        <!-- ===== EMPTY CART STATE ===== -->
+        <div class="cart-empty-state" id="cart-empty-state">
+            <div class="cart-empty-icon">🛒</div>
+            <h2 class="cart-empty-title">Your cart is empty</h2>
+            <p class="cart-empty-subtitle">Looks like you haven't added any books yet.<br>Browse our collection and discover your next great read!</p>
+            <a href="{% url 'home-page' %}" class="cart-empty-btn" id="empty-cart-browse-btn">
+                📚 Browse Books
+            </a>
+        </div>
+        {% endif %}
+
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-            $(document).ready(function() {
-                $("#pay-button").click(function(e) {
-                    e.preventDefault();
+</section>
 
-                    const amount = $("#tamount").val();
-                    const address = $("#address").val().trim();
-                    // alert(amount)
-                    // Validation
-                    if (!address) {
-                        alert("Please enter your delivery address.");
-                        return;
-                    }
-
-                    if (!amount || parseInt(amount) <= 0) {
-                        alert("Cart is empty. Please add items before making payment.");
-                        return;
-                    }
-
-                    // Make an AJAX request to initiate the payment
-                    $.ajax({
-                        type: "POST",
-                        url: "/initiate-payment/",
-                        data: { amount: amount, address: address },
-                        dataType: "json",
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
-                        },
-                        success: function(data) {
-                            // alert(data)
-                            const options = {
-                                key: data.key,
-                                amount: data.amount,
-                                currency: data.currency,
-                                order_id: data.id,
-                                name: data.name,
-                                description: data.description,
-                                image: data.image,
-                                handler: function(response) {
-                                    if (response.razorpay_payment_id) {
-                                        window.location.href = "/payment-success/";
-                                    } else {
-                                        alert('Payment failed');
-                                    }
-                                },
-                                prefill: {
-                                    name: "Card Holder Name",
-                                },
-                            };
-
-                            const rzp = new Razorpay(options);
-                            rzp.open();
-                        },
-                        error: function(error) {
-                            console.error("Error initiating payment:", error);
-                        }
-                    });
-                });
-            });
-
-        </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="/static/js/cart.js"></script>
 {% endblock %}

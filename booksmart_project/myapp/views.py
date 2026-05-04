@@ -153,7 +153,7 @@ def update_cart(request, item_id):
         cart_item.quantity = quantity
         cart_item.save()
         messages.success(request, "Cart updated successfully.")
-    return redirect('/cart')  # 'cart' is the name of the cart view
+    return redirect('crtpage')  # 'cart' is the name of the cart view
 
 @login_required
 def delete_cart_item(request, item_id):
@@ -161,7 +161,7 @@ def delete_cart_item(request, item_id):
         cart_item = get_object_or_404(CartItem, id=item_id, user=request.user)
         cart_item.delete()
         messages.success(request, "Item removed from cart.")
-    return redirect('/cart')
+    return redirect('crtpage')  # 'cartpage' is the name of the cart view
 
 
 def books_by_genre(request, genre_id):

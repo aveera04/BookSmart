@@ -18,7 +18,7 @@
                         <img src="{{ book.image.url }}" alt="{{ book.title }}" class="card-img">
                         <div class="card-title">{{ book.title }}</div>
                         <div class="card-rating">★★★★★</div>
-                        <form method="post" action="{% url 'bookdetails' %}">
+                        <form method="post" action="{% url 'book-details' %}">
                             {% csrf_token %}
                             <input type="hidden" name="id" value="{{ book.id }}">
                             <button class="btn-add-cart" id="cart-featured-{{ forloop.counter }}">Details</button>
