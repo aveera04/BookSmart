@@ -46,7 +46,7 @@
             </li>
             <li><a href="#" id="nav-bestsellers">Bestsellers</a></li>
             <li><a href="#" id="nav-newarrivals">New Arrivals</a></li>
-            <li><a href="#" id="nav-aboutus">About Us</a></li>
+            <li><a href="{% url 'about' %}" class="nav-link {% if current_url == 'about' %}active{% endif %}" id="nav-aboutus">About Us</a></li>
             <li><a href="{% url 'contact' %}" class="nav-link {% if current_url == 'contact' %}active{% endif %}" id="nav-contact">Contact</a></li>
         </ul>
         {% if user.is_authenticated %}
@@ -68,7 +68,7 @@
                     <li><a href="#" id="footer-home">Home</a></li>
                     <li><a href="#" id="footer-genres">Genres</a></li>
                     <li><a href="#" id="footer-newarrivals">New Arrivals</a></li>
-                    <li><a href="#" id="footer-aboutus">About Us</a></li>
+                    <li><a href="{% url 'about' %}" id="footer-aboutus">About Us</a></li>
                 </ul>
             </div>
             <div class="footer-column">

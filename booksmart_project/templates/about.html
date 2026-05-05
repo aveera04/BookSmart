@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- ===== HERO BANNER ===== -->
+<section class="about-hero" id="about-hero">
+    <div class="about-hero-overlay"></div>
+    <div class="about-hero-content">
+        <h1>About BooksMart</h1>
+        <p>Your trusted destination for discovering, exploring, and owning the world's best books.</p>
+    </div>
+</section>
+
+<!-- ===== OUR STORY ===== -->
+<section class="about-story" id="about-story">
+    <div class="about-story-container">
+        <div class="about-story-image">
+            <img src="/static/images/bookstore.png" alt="BooksMart Store" id="about-story-img">
+            <div class="about-image-badge" id="about-badge">
+                <span class="badge-number">10+</span>
+                <span class="badge-text">Years of Excellence</span>
+            </div>
+        </div>
+        <div class="about-story-text">
+            <span class="about-tag" id="about-tag">Our Story</span>
+            <h2>A Passion for Books Since Day One</h2>
+            <p>
+                BooksMart was founded with a simple yet powerful mission — to make the joy of reading accessible to everyone. 
+                What started as a small collection of curated titles has grown into a thriving online bookstore, serving thousands 
+                of readers across the country.
+            </p>
+            <p>
+                We believe that every book has the power to inspire, educate, and transform lives. Our carefully curated catalog 
+                spans every genre — from timeless classics to contemporary bestsellers, from gripping thrillers to heartwarming tales.
+            </p>
+            <div class="about-stats" id="about-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="5000">0</span>
+                    <span class="stat-label">Books Available</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="12000">0</span>
+                    <span class="stat-label">Happy Readers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="50">0</span>
+                    <span class="stat-label">Genres Covered</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== OUR VALUES ===== -->
+<section class="about-values" id="about-values">
+    <div class="about-values-container">
+        <div class="about-values-header">
+            <span class="about-tag">Why Choose Us</span>
+            <h2>What Makes BooksMart Special</h2>
+            <p>We go beyond selling books — we create a community of passionate readers.</p>
+        </div>
+        <div class="values-grid" id="values-grid">
+            <div class="value-card" id="value-card-1">
+                <div class="value-icon">📚</div>
+                <h3>Curated Collection</h3>
+                <p>Every book in our catalog is hand-picked by our team of literary experts to ensure quality and variety.</p>
+            </div>
+            <div class="value-card" id="value-card-2">
+                <div class="value-icon">🚀</div>
+                <h3>Fast Delivery</h3>
+                <p>Get your favorite books delivered to your doorstep within 2-3 business days, anywhere in the country.</p>
+            </div>
+            <div class="value-card" id="value-card-3">
+                <div class="value-icon">💰</div>
+                <h3>Best Prices</h3>
+                <p>We offer competitive prices and regular discounts so that great literature is always within your reach.</p>
+            </div>
+            <div class="value-card" id="value-card-4">
+                <div class="value-icon">🛡️</div>
+                <h3>Secure Payments</h3>
+                <p>Shop with confidence using our secure payment gateway powered by Razorpay with multiple payment options.</p>
+            </div>
+            <div class="value-card" id="value-card-5">
+                <div class="value-icon">🤝</div>
+                <h3>Customer First</h3>
+                <p>Our dedicated support team is always ready to help you find the perfect book or resolve any queries.</p>
+            </div>
+            <div class="value-card" id="value-card-6">
+                <div class="value-icon">🌍</div>
+                <h3>Sustainable Approach</h3>
+                <p>We use eco-friendly packaging and partner with publishers who follow sustainable printing practices.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== OUR TEAM ===== -->
+<section class="about-team" id="about-team">
+    <div class="about-team-container">
+        <div class="about-team-header">
+            <span class="about-tag">Our Team</span>
+            <h2>Meet the People Behind BooksMart</h2>
+            <p>A small but mighty team united by a shared love for books and technology.</p>
+        </div>
+        <div class="team-grid" id="team-grid">
+            <div class="team-card" id="team-card-1">
+                <div class="team-avatar">👨‍💼</div>
+                <h3>Rahul Sharma</h3>
+                <span class="team-role">Founder & CEO</span>
+                <p>Visionary leader with 15 years in publishing and e-commerce.</p>
+            </div>
+            <div class="team-card" id="team-card-2">
+                <div class="team-avatar">👩‍💻</div>
+                <h3>Priya Patel</h3>
+                <span class="team-role">Head of Technology</span>
+                <p>Building seamless digital experiences for book lovers worldwide.</p>
+            </div>
+            <div class="team-card" id="team-card-3">
+                <div class="team-avatar">👨‍🎨</div>
+                <h3>Arjun Mehta</h3>
+                <span class="team-role">Creative Director</span>
+                <p>Crafting the visual identity that makes BooksMart stand out.</p>
+            </div>
+            <div class="team-card" id="team-card-4">
+                <div class="team-avatar">👩‍📚</div>
+                <h3>Sneha Reddy</h3>
+                <span class="team-role">Head of Curation</span>
+                <p>Hand-picking every title with care and literary expertise.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA SECTION ===== -->
+<section class="about-cta" id="about-cta">
+    <div class="about-cta-container">
+        <h2>Ready to Find Your Next Great Read?</h2>
+        <p>Browse our collection of over 5,000 titles and discover something extraordinary today.</p>
+        <div class="about-cta-buttons">
+            <a href="{% url 'home-page' %}" class="cta-btn cta-primary" id="cta-browse">Browse Books</a>
+            <a href="{% url 'contact' %}" class="cta-btn cta-secondary" id="cta-contact">Contact Us</a>
+        </div>
+    </div>
+</section>
+
+<link rel="stylesheet" href="/static/css/about.css">
+<script src="/static/js/about.js"></script>
+{% endblock %}

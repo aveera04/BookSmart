@@ -12,7 +12,7 @@ from django.http import JsonResponse
 import razorpay
 
 from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, PasswordChangeForm
-from .models import Book, Genre, CartItem, Order
+from .models import Book, Genre, CartItem, Order, ContactMessage
 from django.shortcuts import get_object_or_404
 
 dotenv.load_dotenv()
@@ -64,17 +64,22 @@ def logoutUser(request):
     return redirect('login')
 
 
-def contact(request):
-    # if request.method == "POST":
-    #     name = request.POST.get("name", "").strip()
-    #     email = request.POST.get("email", "").strip()
-    #     message = request.POST.get("message", "").strip()
+def about(request):
+    return render(request, 'about.html')
 
-    #     if not name or not email or not message:
-    #         messages.error(request, 'Please fill in all contact form fields.')
-    #     else:
-    #         messages.success(request, 'Thanks for contacting us. We will get back to you soon!')
-    #         return redirect('contact')
+
+def contact(request):
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+        message = request.POST.get("message", "").strip()
+
+        if not name or not email or not message:
+            messages.error(request, 'Please fill in all contact form fields.')
+        else:
+            ContactMessage.objects.create(name=name, email=email, message=message)
+            messages.success(request, 'Thanks for contacting us! We will get back to you soon.')
+            return redirect('contact')
 
     return render(request, 'contact.html')
 
