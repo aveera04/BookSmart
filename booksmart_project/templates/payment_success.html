@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/payment_success.css">
+
+<section class="payment-success-section" id="payment-success-section">
+    <div class="payment-success-card" id="payment-success-card">
+        <div class="success-badge" aria-hidden="true">&#10003;</div>
+        <div class="success-content">
+            <h1 class="success-title">Payment successful</h1>
+            <p class="success-subtitle">Thanks for your purchase. Your order is confirmed and will be processed shortly.</p>
+        </div>
+
+        <div class="success-steps" id="success-steps">
+            <div class="success-step">
+                <div class="step-title">Order confirmed</div>
+                <div class="step-text">We have received your payment and created your order.</div>
+            </div>
+            <div class="success-step">
+                <div class="step-title">Preparing shipment</div>
+                <div class="step-text">Our team will pack your books and get them ready for dispatch.</div>
+            </div>
+            <div class="success-step">
+                <div class="step-title">Delivery updates</div>
+                <div class="step-text">You can track progress anytime from your orders page.</div>
+            </div>
+        </div>
+
+        <div class="success-actions" id="success-actions">
+            <a class="success-btn primary" href="{% url 'my_orders' %}">View my orders</a>
+            <a class="success-btn secondary" href="{% url 'home-page' %}">Continue shopping</a>
+        </div>
+
+        <div class="success-support">
+            Need help? <a href="{% url 'contact' %}">Contact support</a> anytime.
+        </div>
+    </div>
+</section>
+{% endblock %}

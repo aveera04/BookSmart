@@ -15,17 +15,26 @@ from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, PasswordChang
 from .models import Book, Genre, CartItem, Order, ContactMessage
 from django.shortcuts import get_object_or_404
 
-dotenv.load_dotenv()
+# Load .env from the project root (same directory as manage.py)
+_env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
+dotenv.load_dotenv(_env_path, override=True)
+
+# Debug: confirm API keys loaded (remove in production)
+print(f"[DEBUG] RAZORPAY_API_KEY loaded: {'Yes' if os.getenv('RAZORPAY_API_KEY') else 'No'}")
+print(f"[DEBUG] RAZORPAY_API_SECRET loaded: {'Yes' if os.getenv('RAZORPAY_API_SECRET') else 'No'}")
+
 # Create your views here.
 def home(request):
     all_books = Book.objects.all()
     featured_books = Book.objects.order_by('-published_date')[:8]
+    bestseller_books = Book.objects.filter(bestseller=True).order_by('-rating')
     return render(
         request,
         'home.html',
         {
             'books': all_books,
             'featured_books': featured_books,
+            'bestseller_books': bestseller_books,
         },
     )
 
@@ -122,9 +131,15 @@ def profile(request):
                 for error in password_form.non_field_errors():
                     messages.error(request, error)
 
+    order_count = Order.objects.filter(user=user).count()
+    cart_count = CartItem.objects.filter(user=user).count()
+
     return render(request, 'profile.html', {
         'profile_form': profile_form,
         'password_form': password_form,
+        'order_count': order_count,
+        'cart_count': cart_count,
+        'orders': Order.objects.filter(user=user).order_by('-date_ordered'),
     })
 
 def bookDetails(request):
@@ -184,45 +199,81 @@ def books_by_genre(request, genre_id):
 @csrf_exempt
 def initiate_payment(request):
     if request.method == "POST":
-        amount = int(request.POST["amount"]) * 100  # Amount in paise
-        # print("Request data:", request.POST)
-        address=request.POST['address']
-        client = razorpay.Client(auth=(os.getenv('RAZORPAY_API_KEY'), os.getenv('RAZORPAY_API_SECRET')))
-        payment_data = {
-            "amount": amount,
-            "currency": "INR",
-            "receipt": "order_receipt",
-            "notes": {
-                "email": "user_email@example.com",
-            },
-        }
+        try:
+            amount = int(request.POST["amount"]) * 100  # Amount in paise
+            address = request.POST['address']
 
-        order = client.order.create(data=payment_data)
+            api_key = os.getenv('RAZORPAY_API_KEY')
+            api_secret = os.getenv('RAZORPAY_API_SECRET')
 
-    #     # Include key, name, description, and image in the JSON response
-        response_data = {
-            "id": order["id"],
-            "amount": order["amount"],
-            "currency": order["currency"],
-            "key": os.getenv('RAZORPAY_API_KEY'),
-            "name": "Books Mart",
-            "description": "Payment for Your Order",
-            "image": "https://yourwebsite.com/logo.png",  # Replace with your logo URL
-        }
-        cart_items=CartItem.objects.filter(user=request.user)
-        # payment_id=response_data.id
-        for cart in cart_items:
-            Order.objects.get_or_create(user=request.user, product= cart.product, quantity=cart.quantity, payment_status='success', address=address)
+            print(f"[DEBUG] Payment attempt - Key: {api_key}, Secret: {'***' + api_secret[-4:] if api_secret else 'None'}")
 
-        CartItem.objects.filter(user=request.user).delete()
+            if not api_key or not api_secret:
+                return JsonResponse({"error": "Payment gateway is not configured. Please contact support."}, status=500)
 
-        return JsonResponse(response_data)
-    return redirect('/payment-success')
+            client = razorpay.Client(auth=(api_key, api_secret))
+            payment_data = {
+                "amount": amount,
+                "currency": "INR",
+                "receipt": "order_receipt",
+                "notes": {
+                    "email": request.user.email,
+                    "address": address,
+                },
+            }
+
+            print(f"[DEBUG] Creating Razorpay order with data: {payment_data}")
+            order = client.order.create(data=payment_data)
+            print(f"[DEBUG] Razorpay order created successfully: {order['id']}")
+
+            # Store address in session for use after payment success
+            request.session['delivery_address'] = address
+
+            response_data = {
+                "id": order["id"],
+                "amount": order["amount"],
+                "currency": order["currency"],
+                "key": api_key,
+                "name": "Books Mart",
+                "description": "Payment for Your Order",
+                "image": "",
+            }
+
+            return JsonResponse(response_data)
+
+        except razorpay.errors.BadRequestError as e:
+            print(f"Razorpay BadRequestError: {e}")
+            return JsonResponse({"error": f"Payment request error: {str(e)}"}, status=400)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print(f"Payment initiation error: {e}")
+            return JsonResponse({"error": f"Payment failed: {str(e)}"}, status=500)
+
+    return redirect('crtpage')
 
 
 def payment_success(request):
+    # Create orders and clear cart after successful payment
+    if request.user.is_authenticated:
+        cart_items = CartItem.objects.filter(user=request.user)
+        address = request.session.get('delivery_address', 'Not provided')
+        if cart_items.exists():
+            for cart in cart_items:
+                Order.objects.get_or_create(
+                    user=request.user,
+                    product=cart.product,
+                    quantity=cart.quantity,
+                    payment_status='success',
+                    address=address,
+                )
+            cart_items.delete()
+            # Clear the session address
+            if 'delivery_address' in request.session:
+                del request.session['delivery_address']
     return render(request, "payment_success.html")
 
+@login_required(login_url='login')
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by("-date_ordered")
     return render(request, "my_orders.html", {"orders": orders})

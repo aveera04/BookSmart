@@ -27,8 +27,12 @@
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-nav-item" data-section="order-history" id="nav-orders">
                     <span class="nav-icon">📦</span> Order History
-                    <span class="nav-badge">0</span>
+                    <span class="nav-badge">{{ order_count|default:0 }}</span>
                 </div>
+                <a href="{% url 'crtpage' %}" class="sidebar-nav-item" id="nav-cart">
+                    <span class="nav-icon">🛒</span> My Cart
+                    <span class="nav-badge">{{ cart_count|default:0 }}</span>
+                </a>
                 <div class="sidebar-nav-item" data-section="my-wishlist" id="nav-wishlist">
                     <span class="nav-icon">❤️</span> My Wishlist
                 </div>
@@ -54,7 +58,7 @@
                 <div class="stat-card">
                     <div class="stat-icon blue">📚</div>
                     <div class="stat-info">
-                        <div class="stat-value">0</div>
+                        <div class="stat-value">{{ order_count|default:0 }}</div>
                         <div class="stat-label">Total Orders</div>
                     </div>
                 </div>
@@ -209,12 +213,41 @@
                     </div>
                 </div>
                 <div class="section-body">
+                    {% if orders %}
+                    <div class="orders-list">
+                        {% for order in orders %}
+                        <div class="order-card" id="order-card-{{ order.id }}">
+                            <div class="order-card-image">
+                                {% if order.product.image %}
+                                <img src="{{ order.product.image.url }}" alt="{{ order.product.title }}">
+                                {% else %}
+                                <div class="order-card-placeholder">📚</div>
+                                {% endif %}
+                            </div>
+                            <div class="order-card-details">
+                                <div class="order-card-title">{{ order.product.title }}</div>
+                                <div class="order-card-author">by {{ order.product.author }}</div>
+                                <div class="order-card-meta">
+                                    <span class="order-qty">Qty: {{ order.quantity }}</span>
+                                    <span class="order-date">{{ order.date_ordered|date:'M d, Y' }}</span>
+                                </div>
+                                <div class="order-card-address">📍 {{ order.address|truncatewords:10 }}</div>
+                            </div>
+                            <div class="order-card-right">
+                                <div class="order-card-price">₹{{ order.product.price }}</div>
+                                <span class="order-status-badge success">{{ order.payment_status|title }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
                     <div class="empty-state">
                         <div class="empty-icon">📦</div>
                         <div class="empty-text">No orders yet</div>
                         <div class="empty-sub">Your order history will appear here once you make a purchase.</div>
                         <a href="{% url 'home-page' %}" class="btn-primary" style="display: inline-block; margin-top: 16px; text-decoration: none;">Browse Books</a>
                     </div>
+                    {% endif %}
                 </div>
             </div>
 

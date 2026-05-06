@@ -49,11 +49,21 @@
             <li><a href="{% url 'about' %}" class="nav-link {% if current_url == 'about' %}active{% endif %}" id="nav-aboutus">About Us</a></li>
             <li><a href="{% url 'contact' %}" class="nav-link {% if current_url == 'contact' %}active{% endif %}" id="nav-contact">Contact</a></li>
         </ul>
-        {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}" class="my-account-link {% if current_url == 'profile' %}active{% endif %}" id="nav-myaccount">My Account</a>
-        {% else %}
-        <a href="{% url 'login' %}" class="my-account-link" id="nav-myaccount">My Account</a>
-        {% endif %}
+        <div class="nav-right-actions">
+            {% if user.is_authenticated %}
+            <a href="{% url 'crtpage' %}" class="nav-cart-btn" id="nav-cart-btn" title="Shopping Cart">
+                <span class="nav-cart-icon">🛒</span>
+                {% if cart_item_count %}
+                <span class="nav-cart-badge" id="nav-cart-badge">{{ cart_item_count }}</span>
+                {% endif %}
+            </a>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="my-account-link {% if current_url == 'profile' %}active{% endif %}" id="nav-myaccount">My Account</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="my-account-link" id="nav-myaccount">My Account</a>
+            {% endif %}
+        </div>
     </nav>
     <main>
         {% block content %}

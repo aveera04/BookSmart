@@ -36,7 +36,9 @@
                         <img src="/static/images/1mYqFpw2cpyRC8kPYNHKlu1v26A.avif" alt="{{ book.title }}" class="card-img">
                         {% endif %}
                         <div class="card-title">{{ book.title }}</div>
-                        <div class="card-rating">★★★★★</div>
+                        <div class="card-rating" aria-label="Rating {{ book.rating }} out of 5">
+                            <span class="rating-stars" style="--rating: {{ book.rating|default:0 }};">★★★★★</span>
+                        </div>
                         <div class="card-price">₹{{ book.price }}</div>
                         <form method="post" action="{% url 'book-details' %}">
                             {% csrf_token %}
@@ -48,7 +50,7 @@
                     <div class="featured-card" id="featured-card-empty">
                         <img src="/static/images/1mYqFpw2cpyRC8kPYNHKlu1v26A.avif" alt="No featured books" class="card-img">
                         <div class="card-title">No featured books available</div>
-                        <div class="card-rating">★★★★★</div>
+                        <div class="card-rating"><span class="rating-stars" style="--rating: 0;">★★★★★</span></div>
                         <div class="card-price">₹0.00</div>
                         <button class="btn-add-cart" type="button">Add to Cart</button>
                     </div>
@@ -70,54 +72,34 @@
             </div>
             <div class="carousel-wrapper" id="bestsellers-carousel">
                 <div class="carousel-track" id="bestsellers-track">
-                    <!-- Card 1 -->
-                    <div class="bestseller-card" id="bestseller-card-1">
-                        <img src="/static/images/images (6).jpg" alt="Dreamer's Folly" class="card-img">
-                        <div class="card-title">Dreamer's Folly</div>
-                        <div class="card-rating">★★★★★</div>
+                    {% for book in bestseller_books %}
+                    <div class="bestseller-card" id="bestseller-card-{{ forloop.counter }}">
+                        {% if book.image %}
+                        <img src="{{ book.image.url }}" alt="{{ book.title }}" class="card-img">
+                        {% else %}
+                        <img src="/static/images/1mYqFpw2cpyRC8kPYNHKlu1v26A.avif" alt="{{ book.title }}" class="card-img">
+                        {% endif %}
+                        <div class="card-title">{{ book.title }}</div>
+                        <div class="card-rating" aria-label="Rating {{ book.rating }} out of 5">
+                            <span class="rating-stars" style="--rating: {{ book.rating|default:0 }};">★★★★★</span>
+                        </div>
+                        <div class="card-price">₹{{ book.price }}</div>
+                        <form method="post" action="{% url 'book-details' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ book.id }}">
+                            <button class="btn-add-cart" id="cart-bestseller-{{ forloop.counter }}">Details</button>
+                        </form>
                     </div>
-                    <!-- Card 2 -->
-                    <div class="bestseller-card" id="bestseller-card-2">
-                        <img src="/static/images/images (7).jpg" alt="To Kill a Mockingbird" class="card-img">
-                        <div class="card-title">To Kill a Mockingbird</div>
-                        <div class="card-rating">★★★★★</div>
+                    {% empty %}
+                    <div class="bestseller-card" id="bestseller-card-empty">
+                        <img src="/static/images/1mYqFpw2cpyRC8kPYNHKlu1v26A.avif" alt="No bestsellers" class="card-img">
+                        <div class="card-title">No bestsellers available yet</div>
+                        <div class="card-rating" aria-label="Rating 0 out of 5">
+                            <span class="rating-stars" style="--rating: 0;">★★★★★</span>
+                        </div>
+                        <div class="card-price">₹0.00</div>
                     </div>
-                    <!-- Card 3 -->
-                    <div class="bestseller-card" id="bestseller-card-3">
-                        <img src="/static/images/sub-buzz-4098-1650279669-2.webp" alt="A Teaspoon of Earth and Sea" class="card-img">
-                        <div class="card-title">A Teaspoon of Earth and Sea</div>
-                        <div class="card-rating">★★★★★</div>
-                    </div>
-                    <!-- Card 4 -->
-                    <div class="bestseller-card" id="bestseller-card-4">
-                        <img src="/static/images/images (3).jpg" alt="River Sing Me Home" class="card-img">
-                        <div class="card-title">River Sing Me Home</div>
-                        <div class="card-rating">★★★★★</div>
-                    </div>
-                    <!-- Card 5 -->
-                    <div class="bestseller-card" id="bestseller-card-5">
-                        <img src="/static/images/81IZJ2z4HhL._UF1000,1000_QL80_.jpg" alt="The Diary of Samuel Pepys" class="card-img">
-                        <div class="card-title">The Diary of Samuel Pepys</div>
-                        <div class="card-rating">★★★★★</div>
-                    </div>
-                    <!-- Card 6 -->
-                    <div class="bestseller-card" id="bestseller-card-6">
-                        <img src="/static/images/6525370.jpg" alt="The Choice" class="card-img">
-                        <div class="card-title">The Choice</div>
-                        <div class="card-rating">★★★★★</div>
-                    </div>
-                    <!-- Card 7 (extra for scroll) -->
-                    <div class="bestseller-card" id="bestseller-card-7">
-                        <img src="/static/images/images.jpg" alt="The Priory of the Orange Tree" class="card-img">
-                        <div class="card-title">The Priory of the Orange Tree</div>
-                        <div class="card-rating">★★★★★</div>
-                    </div>
-                    <!-- Card 8 -->
-                    <div class="bestseller-card" id="bestseller-card-8">
-                        <img src="/static/images/images (5).jpg" alt="Charlotte's Web" class="card-img">
-                        <div class="card-title">Charlotte's Web</div>
-                        <div class="card-rating">★★★★★</div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'myapp.context_processors.nav_genres',
+                'myapp.context_processors.cart_item_count',
             ],
         },
     },
@@ -140,3 +141,6 @@ AUTHENTICATION_BACKENDS=[
     'myapp.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# Allow Razorpay checkout popup to work properly
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
