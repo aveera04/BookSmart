@@ -1,0 +1,6 @@
+Django==5.2.12
+django-mathfilters==1.0.0
+mysqlclient==2.2.8
+pillow==11.3.0
+python-dotenv==1.1.1
+razorpay==2.0.1
