@@ -1,0 +1,77 @@
+/* ===== SEARCH RESULTS PAGE ===== */
+
+/* Wrap cards in a responsive grid matching home page style */
+.search-results-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.search-results-grid .featured-card {
+    flex: 0 0 calc((100% - 90px) / 6);
+}
+
+/* Section header extras */
+.search-results-count {
+    font-size: 14px;
+    color: #5a7a9a;
+    margin: 4px 0 0;
+    font-weight: 400;
+}
+
+.search-results-count em {
+    font-style: normal;
+    font-weight: 600;
+    color: #1e3a5f;
+}
+
+.search-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2c5f7c;
+    text-decoration: none;
+    padding: 8px 18px;
+    border: 1.5px solid #2c5f7c;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+
+.search-back-link:hover {
+    background: #2c5f7c;
+    color: #fff;
+}
+
+/* ===== EMPTY STATE ===== */
+.search-empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    margin-top: 10px;
+}
+
+.search-empty-icon {
+    font-size: 52px;
+    margin-bottom: 16px;
+    line-height: 1;
+}
+
+.search-empty-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin-bottom: 8px;
+}
+
+.search-empty-sub {
+    font-size: 14px;
+    color: #6b7280;
+    max-width: 360px;
+    margin: 0 auto;
+    line-height: 1.6;
+}

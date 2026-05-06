@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.http import JsonResponse
+from django.db.models import Q
 import razorpay
 
 from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, PasswordChangeForm
@@ -26,15 +27,43 @@ print(f"[DEBUG] RAZORPAY_API_SECRET loaded: {'Yes' if os.getenv('RAZORPAY_API_SE
 # Create your views here.
 def home(request):
     all_books = Book.objects.all()
-    featured_books = Book.objects.order_by('-published_date')[:8]
+    new_arrival_books = Book.objects.filter(newArrival=True).order_by('-published_date')
     bestseller_books = Book.objects.filter(bestseller=True).order_by('-rating')
     return render(
         request,
         'home.html',
         {
             'books': all_books,
-            'featured_books': featured_books,
+            'new_arrival_books': new_arrival_books,
             'bestseller_books': bestseller_books,
+        },
+    )
+
+def search_books(request):
+    query = request.GET.get('q', '').strip()
+    results = Book.objects.none()
+
+    if query:
+        results = (
+            Book.objects.filter(
+                Q(title__icontains=query)
+                | Q(author__icontains=query)
+                | Q(genre__name__icontains=query)
+                | Q(isbn__icontains=query)
+                | Q(description__icontains=query)
+                | Q(publisher__icontains=query)
+            )
+            .distinct()
+            .order_by('title')
+        )
+
+    return render(
+        request,
+        'search_results.html',
+        {
+            'query': query,
+            'results': results,
+            'results_count': results.count(),
         },
     )
 

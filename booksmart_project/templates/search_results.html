@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/search_results.css' %}">
+
+<section class="books-section" id="search-results-section">
+    <div class="section-container">
+
+        <!-- ===== HEADER ===== -->
+        <div class="section-header" id="search-results-header">
+            <div>
+                <h2>
+                    {% if query %}Search Results{% else %}Search Books{% endif %}
+                </h2>
+                {% if query %}
+                <p class="search-results-count" id="search-results-count">
+                    {{ results_count }} result{{ results_count|pluralize }} for &ldquo;<em>{{ query }}</em>&rdquo;
+                </p>
+                {% endif %}
+            </div>
+            <a href="{% url 'home-page' %}" class="search-back-link" id="search-back-link">← Back to Home</a>
+        </div>
+
+        <!-- ===== EMPTY / NO QUERY STATE ===== -->
+        {% if not query %}
+        <div class="search-empty-state" id="search-empty-state">
+            <div class="search-empty-icon">🔍</div>
+            <p class="search-empty-title">Start your search</p>
+            <p class="search-empty-sub">Enter a title, author, genre, or ISBN in the search bar above.</p>
+        </div>
+
+        {% elif results_count == 0 %}
+        <div class="search-empty-state" id="search-no-results-state">
+            <div class="search-empty-icon">📭</div>
+            <p class="search-empty-title">No books found</p>
+            <p class="search-empty-sub">We couldn't find anything for <strong>&ldquo;{{ query }}&rdquo;</strong>. Try a different keyword.</p>
+        </div>
+
+        {% else %}
+        <!-- ===== RESULTS GRID (same cards as home page) ===== -->
+        <div class="search-results-grid" id="search-results-grid">
+            {% for book in results %}
+            <div class="featured-card" id="search-card-{{ forloop.counter }}">
+                {% if book.image %}
+                <img src="{{ book.image.url }}" alt="{{ book.title }}" class="card-img">
+                {% else %}
+                <img src="{% static 'images/1mYqFpw2cpyRC8kPYNHKlu1v26A.avif' %}" alt="{{ book.title }}" class="card-img">
+                {% endif %}
+                <div class="card-title">{{ book.title }}</div>
+                <div class="card-rating" aria-label="Rating {{ book.rating }} out of 5">
+                    <span class="rating-stars" style="--rating: {{ book.rating|default:0 }};">★★★★★</span>
+                </div>
+                <div class="card-price">₹{{ book.price }}</div>
+                <form method="post" action="{% url 'book-details' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ book.id }}">
+                    <button class="btn-add-cart" id="search-details-{{ forloop.counter }}">Details</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}

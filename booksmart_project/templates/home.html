@@ -16,11 +16,11 @@
         </div>
     </section>
 
-    <!--  ===== SECTION 3: FEATURED BOOKS ===== -->
+    <!-- ===== SECTION 3: NEW ARRIVALS ===== -->
     <section class="books-section" id="featured-section">
         <div class="section-container">
             <div class="section-header">
-                <h2>Featured Books</h2>
+                <h2>New Arrivals</h2>
                 <div class="carousel-nav">
                     <button class="carousel-btn" id="featured-prev" aria-label="Previous featured books">&#8249;</button>
                     <button class="carousel-btn" id="featured-next" aria-label="Next featured books">&#8250;</button>
@@ -28,7 +28,7 @@
             </div>
             <div class="carousel-wrapper" id="featured-carousel">
                 <div class="carousel-track" id="featured-track">
-                    {% for book in featured_books %}
+                    {% for book in new_arrival_books %}
                     <div class="featured-card" id="featured-card-{{ forloop.counter }}">
                         {% if book.image %}
                         <img src="{{ book.image.url }}" alt="{{ book.title }}" class="card-img">

@@ -396,6 +396,78 @@ img {
     transition: transform 0.4s ease;
 }
 
+/* ===== SEARCH RESULTS ===== */
+.search-summary {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e3a5f;
+}
+
+.search-empty {
+    background: #ffffff;
+    border: 1px dashed #c5d3e1;
+    border-radius: 8px;
+    padding: 18px;
+    color: #1e3a5f;
+}
+
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.search-card {
+    position: relative;
+    border: 1px solid #d6e3f1;
+    background: linear-gradient(135deg, #ffffff 0%, #f7fbff 100%);
+    box-shadow: 0 10px 22px rgba(13, 38, 76, 0.12);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.search-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #1a7a6d 0%, #2c5f7c 100%);
+}
+
+.search-card:hover {
+    transform: translateY(-6px);
+    border-color: #bcd0e6;
+    box-shadow: 0 14px 30px rgba(13, 38, 76, 0.18);
+}
+
+.search-card .card-img {
+    height: 220px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-shadow: 0 6px 14px rgba(16, 48, 90, 0.12);
+}
+
+.search-card .card-title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.search-card .card-price {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1a7a6d;
+}
+
+.search-card .btn-add-cart {
+    background: linear-gradient(90deg, #1e3a5f 0%, #274a72 100%);
+}
+
+.search-card .btn-add-cart:hover {
+    background: linear-gradient(90deg, #2c5f7c 0%, #1e3a5f 100%);
+}
+
 /* ===== FEATURED BOOK CARDS ===== */
 .featured-card {
     flex: 0 0 calc((100% - 90px) / 6);

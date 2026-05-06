@@ -19,10 +19,10 @@
         <a href="{% url 'home-page' %}" class="logo" id="logo" aria-label="BooksMart home">
             <img src="/static/images/logo.png" alt="BooksMart logo">
         </a>
-        <div class="search-container" id="search-bar">
-            <input type="text" placeholder="Search" id="search-input" aria-label="Search books">
-            <button id="search-btn" aria-label="Search">🔍</button>
-        </div>
+        <form class="search-container" id="search-bar" method="get" action="{% url 'search' %}">
+            <input type="text" name="q" placeholder="Search" id="search-input" aria-label="Search books" value="{{ request.GET.q|default:'' }}">
+            <button type="submit" id="search-btn" aria-label="Search">🔍</button>
+        </form>
         {% if user.is_authenticated %}
         <a href="{% url 'logout' %}" class="login-register-btn" id="login-register-btn">Logout</a>
         {% else %}
@@ -44,8 +44,8 @@
                     {% endfor %}
                 </ul>
             </li>
-            <li><a href="#" id="nav-bestsellers">Bestsellers</a></li>
-            <li><a href="#" id="nav-newarrivals">New Arrivals</a></li>
+            <li><a href="{% url 'home-page' %}#bestsellers-section" class="nav-link" id="nav-bestsellers">Bestsellers</a></li>
+            <li><a href="{% url 'home-page' %}#featured-section" class="nav-link" id="nav-newarrivals">New Arrivals</a></li>
             <li><a href="{% url 'about' %}" class="nav-link {% if current_url == 'about' %}active{% endif %}" id="nav-aboutus">About Us</a></li>
             <li><a href="{% url 'contact' %}" class="nav-link {% if current_url == 'contact' %}active{% endif %}" id="nav-contact">Contact</a></li>
         </ul>

@@ -26,6 +26,10 @@
     .bestseller-card {
         flex: 0 0 calc((100% - 72px) / 5);
     }
+
+    .search-results-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
 }
 
 /* ===== TABLETS (max-width: 968px) ===== */
@@ -84,6 +88,10 @@
     .featured-card,
     .bestseller-card {
         flex: 0 0 calc((100% - 54px) / 4);
+    }
+
+    .search-results-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     .section-header h2 {
@@ -198,6 +206,10 @@
         flex: 0 0 calc((100% - 36px) / 3);
     }
 
+    .search-results-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .featured-card .card-img {
         height: 170px;
     }
@@ -288,6 +300,10 @@
     .featured-card,
     .bestseller-card {
         flex: 0 0 calc((100% - 18px) / 2);
+    }
+
+    .search-results-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .featured-card .card-img {
