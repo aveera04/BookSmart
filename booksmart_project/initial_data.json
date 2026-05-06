@@ -1,0 +1,262 @@
+[
+{
+  "model": "myapp.genre",
+  "pk": 1,
+  "fields": {
+    "name": "Fantasy",
+    "description": "Features magic, supernatural elements, and is often inspired by mythology or folklore. High fantasy is set in entirely fictional worlds, while low fantasy or magical realism weaves magic into real-world settings"
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 2,
+  "fields": {
+    "name": "Science Fiction",
+    "description": "Preoccupied with real or real-feeling science, often set in the distant future and exploring themes like time travel and space exploration"
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 3,
+  "fields": {
+    "name": "Mystery",
+    "description": "Characterized by a gripping plot revolving around a crime that must be solved by the protagonist, often featuring a detective or amateur sleuth"
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 4,
+  "fields": {
+    "name": "Romance",
+    "description": "Centers on a romantic relationship as the main plot point, typically ending with a \"happily ever after\" ."
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 5,
+  "fields": {
+    "name": "Thriller & Suspense",
+    "description": "Uses psychological fear and high emotional stakes to build suspense, with the protagonist often acting to save their own life rather than solve a crime ."
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 6,
+  "fields": {
+    "name": "Young Adult (YA)",
+    "description": "Targets readers aged 12-18, following teenage characters navigating the challenges of adolescence."
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 7,
+  "fields": {
+    "name": "Memoir & Autobiography",
+    "description": "True accounts of the author's life, with memoirs emphasizing defining emotional moments and autobiographies providing chronological life events."
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 8,
+  "fields": {
+    "name": "Self-Help",
+    "description": "Books that encourage personal improvement and confidence in areas like relationships, emotional well-being, or finances"
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 9,
+  "fields": {
+    "name": "True Crime",
+    "description": "Chronicles real crimes in detail, presenting true stories that read like well-crafted fiction."
+  }
+},
+{
+  "model": "myapp.genre",
+  "pk": 10,
+  "fields": {
+    "name": "Adventure",
+    "description": "Adventure is a genre centered on exciting, often dangerous journeys or quests where the protagonist faces physical challenges, exploration, and high-stakes situations. The focus is on action, discovery, and overcoming obstacles rather than character development or romance."
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 1,
+  "fields": {
+    "title": "Life of Pi",
+    "isbn": "98464984AD45W",
+    "author": "Yann Martel",
+    "description": "Life of Pi is a Canadian novel that tells the extraordinary story of Piscine Molitor \"Pi\" Patel, a young Indian boy from Pondicherry. The narrative follows Pi's 227-day survival journey after a shipwreck leaves him stranded on a lifeboat in the Pacific Ocean with a Bengal tiger named Richard Parker, along with other zoo animals .\r\n\r\nThe novel explores profound themes of spirituality, faith, and the nature of reality. Pi, who practices Hinduism, Christianity, and Islam simultaneously, uses his spiritual beliefs and resourcefulness to survive his ordeal. The book raises philosophical questions about the relativity of truth and how stories are perceived and told .",
+    "price": "149.00",
+    "publisher": "Knopf Canada",
+    "published_date": "2001-02-04",
+    "image": "book_images/images_2.jpg",
+    "genre": 10,
+    "newArrival": false,
+    "bestseller": true,
+    "rating": "4.5"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 2,
+  "fields": {
+    "title": "The Priory of the Orange Tree",
+    "isbn": "9781635570298",
+    "author": "Samantha Shannon",
+    "description": "A world-encompassing epic fantasy with dragons and mages.",
+    "price": "25.00",
+    "publisher": "Bloomsbury Publishing",
+    "published_date": "2019-02-26",
+    "image": "book_images/images.jpg",
+    "genre": 1,
+    "newArrival": true,
+    "bestseller": false,
+    "rating": "4.0"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 3,
+  "fields": {
+    "title": "The Diary of Samuel Pepys",
+    "isbn": "9780140430332",
+    "author": "Samuel Pepys",
+    "description": "A fascinating personal account of life in 17th-century London.",
+    "price": "15.00",
+    "publisher": "Penguin Classics",
+    "published_date": "1970-01-01",
+    "image": "book_images/81IZJ2z4HhL._UF10001000_QL80_.jpg",
+    "genre": 7,
+    "newArrival": true,
+    "bestseller": false,
+    "rating": "4.5"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 4,
+  "fields": {
+    "title": "To Kill a Mockingbird",
+    "isbn": "9780060935467",
+    "author": "Harper Lee",
+    "description": "A classic novel about justice and innocence in the American South.",
+    "price": "12.00",
+    "publisher": "Harper Perennial Modern Classics",
+    "published_date": "2002-07-09",
+    "image": "book_images/81gepf1eMqL._AC_UF10001000_QL80_.jpg",
+    "genre": 3,
+    "newArrival": true,
+    "bestseller": false,
+    "rating": "4.8"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 5,
+  "fields": {
+    "title": "The Best of Me",
+    "isbn": "9781455502530",
+    "author": "Nicholas Sparks",
+    "description": "A poignant story of two former high school sweethearts who reunite.",
+    "price": "10.00",
+    "publisher": "Grand Central Publishing",
+    "published_date": "2011-10-11",
+    "image": "book_images/81pwBd062L._AC_UF10001000_QL80_.jpg",
+    "genre": 4,
+    "newArrival": true,
+    "bestseller": false,
+    "rating": "4.2"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 6,
+  "fields": {
+    "title": "Dreamer's Folly",
+    "isbn": "9781234567890",
+    "author": "James S.A. Corey",
+    "description": "A space opera set in a future where humanity has colonized the solar system.",
+    "price": "18.00",
+    "publisher": "Orbit",
+    "published_date": "2015-06-02",
+    "image": "book_images/81pGSpDsiRL.jpg",
+    "genre": 2,
+    "newArrival": true,
+    "bestseller": false,
+    "rating": "4.7"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 7,
+  "fields": {
+    "title": "Atomic Habits",
+    "isbn": "9780735211292",
+    "author": "James Clear",
+    "description": "An easy and proven way to build good habits and break bad ones.",
+    "price": "20.00",
+    "publisher": "Avery",
+    "published_date": "2018-10-16",
+    "image": "book_images/817HaeblezL._AC_UF10001000_QL80_.jpg",
+    "genre": 8,
+    "newArrival": true,
+    "bestseller": true,
+    "rating": "4.9"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 8,
+  "fields": {
+    "title": "The Silent Patient",
+    "isbn": "9781250301697",
+    "author": "Alex Michaelides",
+    "description": "A shocking psychological thriller about a woman's act of violence against her husband.",
+    "price": "14.00",
+    "publisher": "Celadon Books",
+    "published_date": "2019-02-05",
+    "image": "book_images/91BbLCJOruL._AC_UF10001000_QL80_.jpg",
+    "genre": 5,
+    "newArrival": true,
+    "bestseller": false,
+    "rating": "4.6"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 9,
+  "fields": {
+    "title": "I'll Be Gone in the Dark",
+    "isbn": "9780062319784",
+    "author": "Michelle McNamara",
+    "description": "A chilling account of the Golden State Killer and the woman who hunted him.",
+    "price": "16.00",
+    "publisher": "HarperCollins",
+    "published_date": "2018-02-27",
+    "image": "book_images/91V5BntGpFL._UF10001000_QL80_.jpg",
+    "genre": 9,
+    "newArrival": true,
+    "bestseller": false,
+    "rating": "4.8"
+  }
+},
+{
+  "model": "myapp.book",
+  "pk": 10,
+  "fields": {
+    "title": "The Hate U Give",
+    "isbn": "9780062498533",
+    "author": "Angie Thomas",
+    "description": "A powerful story about a teenage girl who witnesses the fatal shooting of her childhood best friend.",
+    "price": "110.00",
+    "publisher": "Balzer + Bray",
+    "published_date": "2017-02-28",
+    "image": "book_images/81LrorlYRJL._UF10001000_QL80_.jpg",
+    "genre": 6,
+    "newArrival": true,
+    "bestseller": false,
+    "rating": "4.9"
+  }
+}
+]
