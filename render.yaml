@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: BookSmart
+    runtime: python
+    plan: starter
+    region: oregon
+    branch: main
+    rootDir: booksmart_project
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    preDeployCommand: python manage.py migrate --noinput
+    startCommand: gunicorn booksmart_project.wsgi:application --bind 0.0.0.0:$PORT --workers 2
+    disk:
+      name: booksmart-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DEBUG
+        value: "0"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://*.onrender.com
+      - key: SQLITE_PATH
+        value: /var/data/db.sqlite3
+      - key: MEDIA_ROOT
+        value: /var/data/media
+      - key: RAZORPAY_API_KEY
+        sync: false
+      - key: RAZORPAY_API_SECRET
+        sync: false

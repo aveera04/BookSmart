@@ -1,7 +1,3 @@
-
-from urllib import request
-import dotenv
-import os
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -15,14 +11,6 @@ import razorpay
 from .forms import RegistrationForm, LoginForm, ProfileUpdateForm, PasswordChangeForm
 from .models import Book, Genre, CartItem, Order, ContactMessage
 from django.shortcuts import get_object_or_404
-
-# Load .env from the project root (same directory as manage.py)
-_env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
-dotenv.load_dotenv(_env_path, override=True)
-
-# Debug: confirm API keys loaded (remove in production)
-print(f"[DEBUG] RAZORPAY_API_KEY loaded: {'Yes' if os.getenv('RAZORPAY_API_KEY') else 'No'}")
-print(f"[DEBUG] RAZORPAY_API_SECRET loaded: {'Yes' if os.getenv('RAZORPAY_API_SECRET') else 'No'}")
 
 # Create your views here.
 def home(request):
@@ -232,10 +220,8 @@ def initiate_payment(request):
             amount = int(request.POST["amount"]) * 100  # Amount in paise
             address = request.POST['address']
 
-            api_key = os.getenv('RAZORPAY_API_KEY')
-            api_secret = os.getenv('RAZORPAY_API_SECRET')
-
-            print(f"[DEBUG] Payment attempt - Key: {api_key}, Secret: {'***' + api_secret[-4:] if api_secret else 'None'}")
+            api_key = settings.RAZORPAY_API_KEY
+            api_secret = settings.RAZORPAY_API_SECRET
 
             if not api_key or not api_secret:
                 return JsonResponse({"error": "Payment gateway is not configured. Please contact support."}, status=500)
@@ -251,9 +237,7 @@ def initiate_payment(request):
                 },
             }
 
-            print(f"[DEBUG] Creating Razorpay order with data: {payment_data}")
             order = client.order.create(data=payment_data)
-            print(f"[DEBUG] Razorpay order created successfully: {order['id']}")
 
             # Store address in session for use after payment success
             request.session['delivery_address'] = address
